@@ -2,14 +2,12 @@ import Image from "next/image";
 import prisma from "@/lib/prisma";
 import { useEffect } from "react";
 import Post from "./components/Post";
+import Navbar from "./components/Navbar";
 
 async function getFeed() {
-  const feed = await prisma.post.findMany({
-    where: {
-      published: true,
-    },
+  const feed = await prisma.review.findMany({
     include: {
-      author: {
+      user: {
         select: {
           name: true,
         },
@@ -26,7 +24,8 @@ export default async function Home() {
   const feed = await getFeed();
 
   return (
-    <div>
+    <div className=" bg-slate-800">
+      <Navbar />
       <p className="">main menu</p>
       <Post feed={feed}></Post>
     </div>
