@@ -5,13 +5,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 
+import { authOptions } from "../api/auth/[...nextauth]/route";
+
 function AuthButton() {
   const { data: session } = useSession();
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   if (session) {
     return (
       <div>
-        {session?.user?.name}
+        <Image
+          src={`${session?.user?.image}`}
+          alt="profile picture"
+          width={50}
+          height={50}
+        />
+        <h1>{session?.user?.name}</h1>
         <br />
         <button onClick={() => signOut()} className="">
           Sign out
