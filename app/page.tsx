@@ -24,8 +24,7 @@ export default async function Home() {
   const feed = await getFeed();
 
   return (
-    <div className=" bg-slate-800">
-      <Navbar />
+    <div className=" ">
       <p className="">main menu</p>
       <Post feed={feed}></Post>
     </div>
