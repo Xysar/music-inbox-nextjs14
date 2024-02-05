@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import authOptions from "@/lib/options";
 
 function AuthButton() {
   const { data: session } = useSession();
