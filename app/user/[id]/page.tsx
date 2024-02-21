@@ -1,9 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import StarRating from "@/app/components/StarRating";
 import Navbar from "@/app/components/Navbar";
 
@@ -44,7 +43,7 @@ const UserPage = ({ userId, userInfo, albumDataArray }: any) => {
     const albumIds = await albumResponse.json();
 
     const promises = await Promise.all(
-      albumIds.map((albumId: string) => retrieveAlbumById(albumId))
+      albumIds.map((albumId: string) => fetch("api/get-album/albumId"))
     );
 
     const albumData = await Promise.all(promises);
