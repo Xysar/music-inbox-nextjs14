@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
-import { AuthOptions } from "next-auth";
+
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/options";
 
@@ -22,7 +22,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="bg-zinc-900">
         <SessionProvider session={session}>
           <Navbar />
           <main className="mx-auto max-w-[1300px]">{children}</main>

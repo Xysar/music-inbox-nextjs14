@@ -46,19 +46,19 @@ model User {
 }
 
 model Album {
-    id      Int      @id @default(autoincrement())
+    id      String   @id
     name    String   @unique
-    year    DateTime
     reviews Review[]
 }
 
 model Review {
-    id      Int     @id @default(autoincrement())
-    rating  Decimal
-    albumId Int
+    id      Int    @id @default(autoincrement())
+    rating  Int
+    text    String
+    albumId String
     userId  String
-    album   Album   @relation(fields: [albumId], references: [id])
-    user    User    @relation(fields: [userId], references: [id])
+    album   Album  @relation(fields: [albumId], references: [id])
+    user    User   @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {

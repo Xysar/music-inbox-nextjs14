@@ -15,25 +15,42 @@ function AuthButton() {
 
   if (session) {
     return (
-      <div>
+      <div className="flex items-center gap-8">
         <Image
           src={`${session?.user?.image}`}
           alt="profile picture"
-          width={50}
-          height={50}
+          className="rounded-full"
+          width={80}
+          height={80}
         />
-        <h1>{session?.user?.name}</h1>
-        <br />
-        <button onClick={() => signOut()} className="">
+
+        <Link
+          href="/" //{`/user/${userId}}`
+          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-700"
+        >
+          <h1>Profile</h1>
+        </Link>
+
+        <button
+          onClick={() => signOut()}
+          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-700"
+        >
           Sign out
         </button>
+        <Link href={"/create-review"} className=" ">
+          <p className=" block h-[70px] w-16  rounded-lg pt-[18px] bg-orange-600   text-center duration-150 ease-in-out hover:bg-orange-700 ">
+            +
+          </p>
+        </Link>
       </div>
     );
   }
   return (
     <div className="">
-      Not signed in <br />
-      <button className="" onClick={() => signIn()}>
+      <button
+        className="whitespace-nowrap rounded-xl bg-orange-500 px-8 py-2  duration-100 ease-in hover:bg-orange-700 "
+        onClick={() => signIn()}
+      >
         Sign in{" "}
       </button>
     </div>
@@ -58,56 +75,9 @@ const Navbar = () => {
             <h1 className="text-3xl md:text-5xl">Music Inbox</h1>
           </div>
         </Link>
-        <ul className="hidden items-center gap-6 text-lg md:flex ">
+        <div className="hidden items-center gap-6 text-lg md:flex ">
           <AuthButton />
-          {/* <SignedIn>
-            <li>
-              <Link
-                href={`/user/${userId}`}
-                className="rounded-lg px-8 py-2 duration-100 ease-in hover:bg-slate-800 hover:text-white"
-              >
-                Profile
-              </Link>
-            </li>
-          </SignedIn> */}
-          <li>
-            <Link
-              href={"/"}
-              className="rounded-lg px-8 py-2 duration-100 ease-in hover:bg-slate-800 hover:text-white"
-            >
-              Search
-            </Link>
-          </li>
-          {/* <SignedIn>
-            <li>
-              <Link href={"/CreateReview"} className=" ">
-                <p className="inline-block  h-full w-full rounded-lg bg-primary px-5 py-4 text-center duration-150 ease-in-out hover:scale-110  hover:bg-primary">
-                  +
-                </p>
-              </Link>
-            </li>
-            <li>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "w-16 h-16",
-                  },
-                }}
-                afterSignOutUrl="/"
-              />
-            </li>
-          </SignedIn> */}
-          {/* <SignedOut>
-            <li>
-              <Link
-                href="/Login"
-                className="whitespace-nowrap rounded-xl bg-primary px-8 py-2 ring-orange-500  ring-offset-4 ring-offset-slate-900 duration-100 ease-in hover:bg-slate-900 hover:ring-2"
-              >
-                Log In
-              </Link>
-            </li>
-          </SignedOut> */}
-        </ul>
+        </div>
         <div className="relative md:hidden">
           <button
             onClick={() => {
