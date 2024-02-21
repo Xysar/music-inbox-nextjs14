@@ -176,4 +176,4 @@ const UserPage = ({ userId, userInfo, albumDataArray }: any) => {
 //   return { props: { userId, userInfo, albumDataArray } };
 // }
 
-// export default UserPage;
+export default UserPage;
