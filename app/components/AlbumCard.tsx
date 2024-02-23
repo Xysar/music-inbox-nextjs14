@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
-
-type Album = {};
+import { useRouter } from "next/navigation";
 
 const AlbumCard = ({
   currentAlbum,
@@ -20,6 +18,8 @@ const AlbumCard = ({
   useEffect(() => {
     console.log(currentAlbum);
   }, [currentAlbum]);
+
+  const router = useRouter();
 
   const returnTracklist = () => {
     if (currentAlbum?.tracks) {
@@ -68,7 +68,7 @@ const AlbumCard = ({
               className="mb-2"
               dangerouslySetInnerHTML={
                 currentAlbum?.wiki
-                  ? { __html: `${currentAlbum?.wiki?.summary}` }
+                  ? { __html: `${currentAlbum?.wiki.summary}` }
                   : { __html: "" }
               }
             ></p>
@@ -103,6 +103,7 @@ const AlbumCard = ({
               </div>
             </div>
             <button
+              onClick={() => router.push(`album/${currentAlbumId}`)}
               className={`${
                 showLink ? "block" : "hidden"
               } self-end rounded-lg bg-orange-600 px-8 py-2 text-white duration-150 ease-in-out hover:bg-orange-700`}
