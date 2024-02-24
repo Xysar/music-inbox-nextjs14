@@ -6,7 +6,7 @@ export const GET = async (request: NextRequest) => {
   const mbid = searchParams.get("mbid");
 
   const album = await fetch(
-    `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&mbid=${mbid}&format=json`
+    `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.LASTFM_KEY}&mbid=${mbid}&format=json`
   );
   const albumData = await album.json();
   return NextResponse.json({ albumData });
