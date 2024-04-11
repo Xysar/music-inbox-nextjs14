@@ -9,9 +9,6 @@ import authOptions from "@/lib/options";
 
 function AuthButton() {
   const { data: session } = useSession();
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
 
   if (session) {
     return (
@@ -67,6 +64,10 @@ const Navbar = () => {
           <div className="flex cursor-pointer items-center gap-5">
             <Image
               src="/record.svg"
+              style={{
+                filter:
+                  "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+              }}
               width={250}
               height={250}
               alt="vinyl record"
@@ -87,6 +88,10 @@ const Navbar = () => {
           >
             <Image
               className="h-16 w-16 min-w-fit p-2 "
+              style={{
+                filter:
+                  "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+              }}
               src="/bars-solid.svg"
               height={250}
               width={250}

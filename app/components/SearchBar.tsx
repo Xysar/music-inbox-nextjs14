@@ -1,3 +1,5 @@
+"use client";
+export const dynamic = "force-dynamic";
 import React, { useRef, useEffect } from "react";
 
 const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
@@ -17,7 +19,6 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
   const loadAlbum = async (input: string) => {
     let queriedAlbum = await fetch(`api/lastfm/get-album?name=${input}`);
     const { album } = await queriedAlbum.json();
-    console.log(album);
     if (album && album.mbid) {
       const queriedAlbumId = await fetch(
         `api/lastfm/get-album-id?mbid=${album.mbid}`
