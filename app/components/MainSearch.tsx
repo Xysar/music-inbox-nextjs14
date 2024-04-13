@@ -1,16 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-
+import { Album } from "@/types";
 import AlbumCard from "./AlbumCard";
 import SearchBar from "./SearchBar";
 
-const MainSearch = () => {
-  const [currentAlbum, setCurrentAlbum] = useState<any>(null);
+const MainSearch = ({ initialAlbum }: { initialAlbum: Album }) => {
+  const [currentAlbum, setCurrentAlbum] = useState<any>(initialAlbum);
   const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
 
   return (
-    <div className="mt-20 mx-5">
+    <div className=" mx-5">
       <SearchBar
         setCurrentAlbum={setCurrentAlbum}
         setCurrentAlbumId={setCurrentAlbumId}

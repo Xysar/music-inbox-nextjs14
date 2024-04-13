@@ -1,32 +1,22 @@
 import React from "react";
-
+import { getAlbum } from "../../../lib/services/albums";
 import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
 
 const getAlbumInfo = async (albumId: string) => {
-  const data = await fetch(
-    `http://localhost:3000/api/lastfm/get-album-id?mbid=${albumId}`
-  );
-
   const response = await fetch(
-    `http://localhost:3000/api/get-album?mbid=${albumId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
+    `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&mbid=${albumId}&format=json`
   );
+  const data = await response.json();
+  const albumData = data.album;
 
-  const { albumInfo } = await response.json();
+  const albumInfo = await getAlbum(albumId);
+
   let albumReviews = null;
 
   if (albumInfo) {
     albumReviews = albumInfo.reviews;
   }
-  const {
-    albumData: { album: albumData },
-  } = await data.json();
 
   return { albumData, albumReviews };
 };

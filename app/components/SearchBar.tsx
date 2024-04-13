@@ -1,18 +1,8 @@
 "use client";
 export const dynamic = "force-dynamic";
+import { Album } from "@/types";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-interface AlbumImage {
-  "#text": string;
-  size: string;
-}
-
-interface Album {
-  name: string;
-  artist: string;
-  image: Array<AlbumImage>;
-  mbid: string;
-}
 
 const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
   const albumInput = useRef<HTMLInputElement>(null);
@@ -20,9 +10,6 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
 
   const [currentResults, setCurrentResults] = useState([]);
   const [displayResults, setdisplayResults] = useState(false);
-  useEffect(() => {
-    loadAlbum("51467269-3122-3d7e-92b2-0f0a694d30c1");
-  }, []);
 
   useEffect(() => {
     document.addEventListener("click", (e) => {
