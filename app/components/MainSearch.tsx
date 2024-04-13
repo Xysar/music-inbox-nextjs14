@@ -10,7 +10,7 @@ const MainSearch = () => {
   const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
 
   return (
-    <div>
+    <div className="mt-20 mx-5">
       <SearchBar
         setCurrentAlbum={setCurrentAlbum}
         setCurrentAlbumId={setCurrentAlbumId}

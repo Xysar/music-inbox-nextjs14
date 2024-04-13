@@ -33,7 +33,7 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
   };
 
   return (
-    <section className=" bg-slate-900">
+    <section className=" bg-dark-navy">
       <div className="m-auto max-w-[1300px]">
         <h3 className="font-poppins text-3xl text-white "></h3>
         <form onSubmit={(e) => handleSubmit(e)} className="flex-1 ">
@@ -42,9 +42,9 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
               type="text"
               ref={albumInput}
               placeholder="Enter Album Name"
-              className=" bg-search box-border w-full rounded-l-lg border  border-transparent  bg-slate-400 bg-contain bg-no-repeat px-3 py-3 text-xl  placeholder-slate-600 focus:border focus:border-primary focus:outline-none "
+              className="text-slate-100 bg-search box-border w-full rounded-l-lg border  border-transparent  bg-slate-700 bg-contain bg-no-repeat px-3 py-3 text-xl  placeholder-slate-400 focus:border focus:border-primary focus:outline-none "
             />
-            <button className="  rounded-r-lg  bg-slate-800  px-4 text-slate-100  hover:bg-slate-500">
+            <button className="  rounded-r-lg  text-xl bg-dark-navy  px-4 text-slate-100  hover:bg-slate-500">
               Search
             </button>
           </div>

@@ -30,7 +30,7 @@ function AuthButton() {
 
         <button
           onClick={() => signOut()}
-          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-700"
+          className="whitespgace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-700"
         >
           Sign out
         </button>
@@ -58,7 +58,7 @@ const Navbar = () => {
   const [toggle, setToggle] = useState(false);
 
   return (
-    <nav className="border-b border-b-white">
+    <nav className="bg-slate-700">
       <div className="flex w-full items-center justify-between px-10 py-6 text-slate-200">
         <Link href={"/"}>
           <div className="flex cursor-pointer items-center gap-5">

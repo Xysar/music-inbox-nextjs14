@@ -46,7 +46,7 @@ const AlbumCard = ({
   };
 
   return (
-    <div className="z-[5] my-10 w-full rounded-lg bg-slate-800 p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
+    <div className="z-[5] my-10 w-full rounded-lg bg-dark-navy p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
       <div className="flex justify-between ">
         <h1 className="text-3xl">{currentAlbum?.name}</h1>
         <h2 className="text-2xl">{currentAlbum?.artist}</h2>
@@ -80,7 +80,7 @@ const AlbumCard = ({
               <div
                 className={`${
                   showTracklist ? "block" : "hidden"
-                } absolute left-0 top-0 h-40 w-[100%] no-scrollbar  overflow-x-hidden  `}
+                } absolute left-0 top-0 h-40 w-[100%]   overflow-x-hidden  `}
               >
                 {currentAlbum?.tracks?.track.map(
                   (curTrack: any, index: number) => {

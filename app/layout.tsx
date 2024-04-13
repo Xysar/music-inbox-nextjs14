@@ -22,7 +22,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className="bg-zinc-900">
+      <body className="bg-slate-900">
         <SessionProvider session={session}>
           <Navbar />
           <main className="mx-auto max-w-[1300px]">{children}</main>
