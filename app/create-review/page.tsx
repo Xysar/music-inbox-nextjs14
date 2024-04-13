@@ -21,7 +21,6 @@ const CreateReview: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { data: session } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     if (!session || !session.user) {
