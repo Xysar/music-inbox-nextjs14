@@ -9,10 +9,10 @@ export async function GET(request: NextRequest) {
     `https://ws.audioscrobbler.com/2.0/?method=album.search&album=${name}&limit=5&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&format=json`
   );
   const jsonData = await response.json();
-  let album = null;
+  let albumMatches = null;
   if (jsonData.results) {
-    album = jsonData.results.albummatches.album[0];
+    albumMatches = jsonData.results.albummatches;
   }
 
-  return NextResponse.json({ album });
+  return NextResponse.json({ albumMatches });
 }
