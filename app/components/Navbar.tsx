@@ -5,10 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import authOptions from "@/lib/options";
-
 function AuthButton() {
   const { data: session } = useSession();
+  useEffect(() => {
+    console.log(session);
+  }, []);
 
   if (session) {
     return (
@@ -22,15 +23,15 @@ function AuthButton() {
         />
 
         <Link
-          href="/" //{`/user/${userId}}`
-          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-700"
+          href={`/user/${session.user.id}`}
+          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-800"
         >
           <h1>Profile</h1>
         </Link>
 
         <button
           onClick={() => signOut()}
-          className="whitespgace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-700"
+          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-800"
         >
           Sign out
         </button>

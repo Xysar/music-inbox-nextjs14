@@ -5,12 +5,18 @@ import { Album } from "@/types";
 import AlbumCard from "./AlbumCard";
 import SearchBar from "./SearchBar";
 
-const MainSearch = ({ initialAlbum }: { initialAlbum: Album }) => {
+const MainSearch = ({
+  initialAlbum,
+  initialAlbumId,
+}: {
+  initialAlbum: Album;
+  initialAlbumId: string;
+}) => {
   const [currentAlbum, setCurrentAlbum] = useState<any>(initialAlbum);
-  const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
+  const [currentAlbumId, setCurrentAlbumId] = useState<string>(initialAlbumId);
 
   return (
-    <div className=" mx-5">
+    <div className="px-5">
       <SearchBar
         setCurrentAlbum={setCurrentAlbum}
         setCurrentAlbumId={setCurrentAlbumId}

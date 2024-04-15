@@ -5,6 +5,7 @@ const TopAlbums = ({ albums }: any) => {
   const albumsToDisplay = () => {
     return albums?.slice(0, 5);
   };
+
   return (
     <div className="mx-4 flex-1 rounded-lg bg-slate-800 p-4 text-white">
       <h2 className=" pb-4  text-3xl">Trending Albums</h2>
@@ -13,7 +14,7 @@ const TopAlbums = ({ albums }: any) => {
           <li key={index}>
             <Image
               src={album.imageId}
-              alt="album picture "
+              alt="album picture"
               width={300}
               height={300}
               className="mb-3 "

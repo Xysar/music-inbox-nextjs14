@@ -20,7 +20,10 @@ export default async function Home() {
   return (
     <div className=" ">
       <Introduction />
-      <MainSearch initialAlbum={initialAlbum} />
+      <MainSearch
+        initialAlbum={initialAlbum}
+        initialAlbumId={"51467269-3122-3d7e-92b2-0f0a694d30c1"}
+      />
       <TopAlbums />
     </div>
   );
