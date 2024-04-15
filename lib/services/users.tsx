@@ -5,6 +5,16 @@ export const getUser = async (id: string) => {
     where: {
       id: id!,
     },
+    include: {
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+          text: true,
+          album: true,
+        },
+      },
+    },
   });
   return userInfo;
 };

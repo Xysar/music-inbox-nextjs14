@@ -7,9 +7,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 function AuthButton() {
   const { data: session } = useSession();
-  useEffect(() => {
-    console.log(session);
-  }, []);
 
   if (session) {
     return (

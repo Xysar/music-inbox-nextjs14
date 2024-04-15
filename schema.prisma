@@ -47,7 +47,9 @@ model User {
 
 model Album {
     id      String   @id
-    name    String   @unique
+    artist  String?
+    name    String
+    imageId String?
     reviews Review[]
 }
 

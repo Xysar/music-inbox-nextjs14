@@ -10,8 +10,10 @@ interface review {
   rating: number;
   text: string;
   albumId: string;
+  albumArtist: string;
   userId: string;
   albumName: string;
+  albumImageId: string;
 }
 
 const CreateReview: React.FC = () => {
@@ -40,6 +42,8 @@ const CreateReview: React.FC = () => {
       rating: rating,
       albumId: currentAlbumId,
       albumName: currentAlbum.name,
+      albumArtist: currentAlbum.artist,
+      albumImageId: currentAlbum?.image[2]["#text"],
       userId: session?.user?.id,
     };
     console.log(newReview);

@@ -3,44 +3,39 @@ import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/options";
-import StarRating from "@/app/components/StarRating";
-import Navbar from "@/app/components/Navbar";
+
 import UserReviews from "@/app/components/UserReviews";
 import { getUser } from "@/lib/services/users";
+import { Album } from "@/types";
+import { Review } from "@prisma/client";
 
 const getUserInfo = async (userId: string) => {
-  const response = await getUser(userId);
-  console.log(response);
-  const userInfo = await response.json();
+  const userInfo = await getUser(userId);
+  console.log(userInfo);
   return userInfo;
 };
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user) {
-    redirect("api/auth/signin");
-  }
+  const userOwnsAccount = session?.user.id == params.id;
 
-  const { userInfo } = await getUserInfo(params.id);
-
-  const router = useRouter();
+  const userInfo = await getUserInfo(params.id);
 
   return (
-    <section className=" relative min-h-screen bg-slate-900">
-      {JSON.stringify(session, null, 2)}
+    <section className="relative min-h-screen bg-slate-900">
       <div className=" m-auto max-w-[1300px]">
         <div className="m-auto w-[300px] justify-between  p-10">
           <div className="flex flex-col items-center gap-5 ">
-            {/* {user && (
+            {userInfo && (
               <Image
-                src={`${userInfo?.imageId}`}
+                src={`${userInfo?.image}`}
                 alt=""
                 width={200}
                 height={200}
                 className="h-[200px] w-[200px]  rounded-full object-cover"
               />
-            )} */}
-            <p className="text-3xl text-white "> {userInfo?.username}</p>
+            )}
+            <p className="text-3xl text-white "> {userInfo?.name}</p>
           </div>
         </div>
         <div className="pb-4 ">
@@ -49,7 +44,12 @@ const UserPage = async ({ params }: { params: { id: string } }) => {
               No Reviews Made Yet
             </p>
           )}
-          {/* {userInfo.reviews && <UserReviews userInfo={userInfo} />} */}
+          {userInfo.reviews && (
+            <UserReviews
+              userInfo={userInfo}
+              userOwnsAccount={userOwnsAccount}
+            />
+          )}
         </div>
       </div>
     </section>

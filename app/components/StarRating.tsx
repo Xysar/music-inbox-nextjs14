@@ -22,7 +22,7 @@ const StarRating = ({ rating, handleClick }: any) => {
               <Image
                 width={50}
                 height={50}
-                src="yellow-star.svg"
+                src="/yellow-star.svg"
                 alt="star"
                 key={index}
                 onMouseEnter={() => onEnterStar(index)}
@@ -35,7 +35,7 @@ const StarRating = ({ rating, handleClick }: any) => {
               <Image
                 width={50}
                 height={50}
-                src="star.svg"
+                src="/star.svg"
                 alt="star"
                 key={index}
                 onMouseEnter={() => onEnterStar(index)}
@@ -50,7 +50,7 @@ const StarRating = ({ rating, handleClick }: any) => {
             <Image
               width={50}
               height={50}
-              src="yellow-star.svg"
+              src="/yellow-star.svg"
               alt="star"
               key={index}
               onMouseEnter={() => onEnterStar(index)}
@@ -63,7 +63,7 @@ const StarRating = ({ rating, handleClick }: any) => {
             <Image
               width={50}
               height={50}
-              src="star.svg"
+              src="/star.svg"
               alt="star"
               key={index}
               onMouseEnter={() => onEnterStar(index)}
