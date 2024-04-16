@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import StarRating from "./StarRating";
+import { Review } from "@prisma/client";
 const UserReviews = ({
   userInfo,
   userOwnsAccount,
@@ -15,28 +16,30 @@ const UserReviews = ({
     console.log(userInfo);
   }, []);
 
-  const handleDelete = async (index: number) => {
-    const idTodelete = userReviews[index].id;
-    await deleteReview(idTodelete);
+  const handleDelete = async (reviewToDelete: Review, index: number) => {
+    setUserReviews(
+      userReviews.filter(
+        (singleReview: Review) => singleReview.id !== reviewToDelete.id
+      )
+    );
+    await deleteReview(reviewToDelete);
   };
 
   const handleRatingClick = () => {};
 
   const updateRating = async () => {};
 
-  const deleteReview = async (reviewId: number) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/delete-review/${reviewId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reviewId,
-        }),
-      }
-    );
+  const deleteReview = async (review: Review) => {
+    const reviewId = review.id;
+    const response = await fetch(`/api/delete-review`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewId,
+      }),
+    });
   };
 
   return (
@@ -73,7 +76,7 @@ const UserReviews = ({
 
                 {userOwnsAccount && (
                   <button
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(review, index)}
                     className=" flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800"
                   >
                     <Image
@@ -86,9 +89,7 @@ const UserReviews = ({
                 )}
               </div>
               <div className="">
-                <p className="m-auto h-[175px] overflow-y-scroll text-white ">
-                  {review.text}
-                </p>
+                <p className="m-auto text-white ">{review.text}</p>
               </div>
             </div>
           </div>
