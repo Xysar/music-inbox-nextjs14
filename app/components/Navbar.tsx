@@ -10,30 +10,29 @@ function AuthButton() {
 
   if (session) {
     return (
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-6">
         <Image
           src={`${session?.user?.image}`}
           alt="profile picture"
-          className="rounded-full"
+          className="rounded-full "
           width={80}
           height={80}
         />
-
         <Link
           href={`/user/${session.user.id}`}
-          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-800"
+          className="whitespace-nowrap text-base flex items-center justify-center rounded-xl w-28 h-12 box-border bg-slate-800 duration-150 border-opacity-0 ease-in-out hover:bg-dark-navy border border-dark-navy hover:border-white"
         >
-          <h1>Profile</h1>
+          Profile
         </Link>
 
         <button
           onClick={() => signOut()}
-          className="whitespace-nowrap rounded-xl  px-8 py-2  duration-100 ease-in hover:bg-slate-800"
+          className="whitespace-nowrap text-base rounded-xl flex items-center justify-center w-28 h-12 box-border bg-slate-800 duration-150 border-opacity-0 ease-in-out hover:bg-dark-navy border border-dark-navy hover:border-white"
         >
           Sign out
         </button>
         <Link href={"/create-review"} className=" ">
-          <p className=" block h-[70px] w-16  rounded-lg pt-[18px] bg-orange-600   text-center duration-150 ease-in-out hover:bg-orange-700 ">
+          <p className=" block h-[70px] px-5  rounded-lg pt-[19px] bg-orange-600   text-center duration-150 ease-in-out box-border hover:bg-dark-navy border shadow-md border-opacity-0 border-dark-navy hover:border-white ">
             +
           </p>
         </Link>
@@ -43,7 +42,7 @@ function AuthButton() {
   return (
     <div className="">
       <button
-        className="whitespace-nowrap rounded-xl bg-orange-500 px-8 py-2  duration-100 ease-in hover:bg-orange-700 "
+        className="whitespace-nowrap rounded-xl bg-orange-600 px-8 py-2  duration-150 ease-in  box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
         onClick={() => signIn()}
       >
         Sign in{" "}
@@ -57,8 +56,8 @@ const Navbar = () => {
 
   return (
     <nav className="bg-slate-700">
-      <div className="flex w-full items-center justify-between px-10 py-6 text-slate-200">
-        <Link href={"/"}>
+      <div className="flex items-center justify-between px-10 py-2 text-slate-200">
+        <Link href={"/"} className="">
           <div className="flex cursor-pointer items-center gap-5">
             <Image
               src="/record.svg"
@@ -66,15 +65,18 @@ const Navbar = () => {
                 filter:
                   "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
               }}
-              width={250}
-              height={250}
+              width={200}
+              height={200}
               alt="vinyl record"
-              className="h-24 w-24  flex-1"
+              className="h-20 w-20  flex-1"
             />
-            <h1 className="text-3xl md:text-5xl">Music Inbox</h1>
+            <h1 className="text-3xl md:text-4xl ">
+              Music
+              <br /> Inbox
+            </h1>
           </div>
         </Link>
-        <div className="hidden items-center gap-6 text-lg md:flex ">
+        <div className="hidden md:flex ">
           <AuthButton />
         </div>
         <div className="relative md:hidden">

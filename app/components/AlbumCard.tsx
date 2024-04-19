@@ -106,9 +106,9 @@ const AlbumCard = ({
               onClick={() => router.push(`album/${currentAlbumId}`)}
               className={`${
                 showLink ? "block" : "hidden"
-              } self-end rounded-lg bg-orange-600 px-8 py-2 text-white duration-150 ease-in-out hover:bg-orange-700`}
+              } self-end rounded-lg bg-slate-700 px-8 py-2 text-white duration-150 ease-in-out  box-border hover:bg-dark-navy border border-dark-navy hover:border-white`}
             >
-              {"Go"}
+              {"Go To Album"}
             </button>
           </div>
         </div>

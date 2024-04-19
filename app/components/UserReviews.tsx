@@ -1,6 +1,16 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import StarRating from "./StarRating";
 import { Review } from "@prisma/client";
 const UserReviews = ({
@@ -25,9 +35,7 @@ const UserReviews = ({
     await deleteReview(reviewToDelete);
   };
 
-  const handleRatingClick = () => {};
-
-  const updateRating = async () => {};
+  const handleEditingClick = () => {};
 
   const deleteReview = async (review: Review) => {
     const reviewId = review.id;
@@ -69,23 +77,74 @@ const UserReviews = ({
 
             <div className="flex h-[300px] flex-col gap-4 bg-slate-900 p-5 lg:w-[80%]">
               <div className="flex items-center justify-between ">
-                <StarRating
-                  rating={review.rating}
-                  handleClick={handleRatingClick}
-                />
+                <StarRating rating={review.rating} />
 
                 {userOwnsAccount && (
-                  <button
-                    onClick={() => handleDelete(review, index)}
-                    className=" flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800"
-                  >
-                    <Image
-                      src={"/trash-solid.svg"}
-                      width={20}
-                      height={20}
-                      alt="trash can image"
-                    ></Image>
-                  </button>
+                  <div className="flex gap-2">
+                    <Dialog>
+                      <DialogTrigger>
+                        <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
+                          <Image
+                            src="/pen.svg"
+                            style={{
+                              filter:
+                                "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+                            }}
+                            alt="edit pen icon"
+                            className=""
+                            width={30}
+                            height={30}
+                          ></Image>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="bg-black">
+                        <DialogHeader className="text-white">
+                          <DialogTitle>Edit review</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <label htmlFor="name" className="text-right">
+                              Name
+                            </label>
+                            <input
+                              id="name"
+                              defaultValue="Pedro Duarte"
+                              className="col-span-3 p-2"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <label htmlFor="username" className="text-right">
+                              Username
+                            </label>
+                            <input
+                              id="username"
+                              defaultValue="@peduarte"
+                              className="col-span-3"
+                            />
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <button
+                            type="submit"
+                            className="bg-dark-navy text-white rounded-md p-2"
+                          >
+                            Save changes
+                          </button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                    <button
+                      onClick={() => handleDelete(review, index)}
+                      className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800"
+                    >
+                      <Image
+                        src={"/trash-solid.svg"}
+                        width={20}
+                        height={20}
+                        alt="trash can image"
+                      ></Image>
+                    </button>
+                  </div>
                 )}
               </div>
               <div className="">

@@ -71,7 +71,7 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
               placeholder="Enter Album Name"
               className="text-slate-100 bg-search box-border w-full rounded-l-lg border  border-transparent  bg-slate-700 bg-contain bg-no-repeat px-3 py-3 text-xl  placeholder-slate-400 focus:border focus:border-primary focus:outline-none "
             />
-            <button className="  rounded-r-lg  text-xl bg-dark-navy  px-4 text-slate-100  hover:bg-slate-500">
+            <button className="  rounded-r-lg  text-xl duration-150  px-4 text-slate-100  box-border bg-dark-navy  hover:bg-dark-navy border border-dark-navy hover:border-white">
               Search
             </button>
           </div>

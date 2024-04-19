@@ -21,6 +21,8 @@ const CreateReview: React.FC = () => {
   const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -58,16 +60,25 @@ const CreateReview: React.FC = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     if (!reviewInput.current?.value) {
+      setError(true);
+      return;
+    }
+    if (!currentAlbum) {
+      setError(true);
       return;
     }
     if (rating < 0) {
+      setError(true);
       return;
     }
 
     await createReview();
-    //router.push(`/user/${session?.user?.id}`);
+    router.push(`/user/${session?.user?.id}`);
   };
 
   return (
@@ -126,12 +137,12 @@ const CreateReview: React.FC = () => {
               <StarRating rating={rating} handleClick={handleRatingClick} />
             </div>
             <button
-              className="m-auto block rounded-lg bg-primary p-3 text-lg duration-300 ease-in-out  hover:bg-slate-900"
-              type="button"
-              onClick={() => handleSubmit()}
+              className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
+              type="submit"
+              onClick={(e) => handleSubmit(e)}
             >
               {" "}
-              Submit Review
+              Submit
             </button>
           </form>
         </div>

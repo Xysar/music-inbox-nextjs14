@@ -11,7 +11,6 @@ import { Review } from "@prisma/client";
 
 const getUserInfo = async (userId: string) => {
   const userInfo = await getUser(userId);
-  console.log(userInfo);
   return userInfo;
 };
 
