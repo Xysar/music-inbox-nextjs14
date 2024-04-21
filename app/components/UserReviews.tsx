@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import StarRating from "./StarRating";
+import StaticStarRating from "./StaticStarRating";
 import { Review } from "@prisma/client";
 const UserReviews = ({
   userInfo,
@@ -21,10 +24,10 @@ const UserReviews = ({
   userOwnsAccount: boolean;
 }) => {
   const [userReviews, setUserReviews] = useState(userInfo.reviews);
-
-  useEffect(() => {
-    console.log(userInfo);
-  }, []);
+  const [currentForm, setCurrentForm] = useState("");
+  const [rating, setRating] = useState(0);
+  const [textValue, setTextValue] = useState("");
+  const [reviewId, setReviewId] = useState(-1);
 
   const handleDelete = async (reviewToDelete: Review, index: number) => {
     setUserReviews(
@@ -34,8 +37,6 @@ const UserReviews = ({
     );
     await deleteReview(reviewToDelete);
   };
-
-  const handleEditingClick = () => {};
 
   const deleteReview = async (review: Review) => {
     const reviewId = review.id;
@@ -50,89 +51,105 @@ const UserReviews = ({
     });
   };
 
+  function handleEditSubmit(): void {
+    console.log(textValue, rating);
+  }
+
+  function handleEditOpen(review: Review): void {
+    console.log(textValue);
+    setTextValue(review.text);
+    setRating(review.rating);
+    setReviewId(review.id);
+  }
+
+  const handleInputChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setTextValue(event.target.value);
+  };
+
   return (
-    <div>
-      <div className="pb-4 ">
+    <section className="m-4">
+      <Dialog>
         {!userInfo.reviews && (
           <p className="text-center text-xl text-white ">No Reviews Made Yet</p>
         )}
+        <DialogContent className="bg-slate-700 border border-dark-navy">
+          <DialogHeader className="text-white">
+            <DialogTitle>Edit review</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="text" className="text-right text-white">
+                Content:
+              </Label>
+              <Textarea
+                id="text"
+                value={textValue}
+                onChange={(e) => handleInputChange(e)}
+                placeholder=""
+                className="resize-none col-span-3 p-1 bg-slate-200"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label className="text-white text-right">Rating:</Label>
+              <div className="col-span-3 ">
+                <StarRating rating={rating} setRating={setRating} />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <button
+              type="submit"
+              onClick={() => handleEditSubmit()}
+              className="bg-orange-600 text-white rounded-md p-2 border border-dark-navy hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+            >
+              Save Changes
+            </button>
+          </DialogFooter>
+        </DialogContent>
+
         {userReviews.map((review: any, index: number) => (
           <div
             key={review.id}
-            className="mb-4 flex flex-col justify-between border-b-2 border-slate-700 text-black lg:flex-row"
+            className="mb-4 flex flex-col justify-between border-white border-2 rounded-lg  lg:flex-row"
           >
-            <div className="  flex w-full flex-col items-center  lg:flex-row ">
+            <div className="  flex w-full flex-col items-center   lg:flex-row ">
               <Image
                 src={review.album.imageId}
                 width={200}
-                className="h-[300px] w-[300px]"
+                className="h-[300px] w-[300px] rounded-xl"
                 height={200}
                 alt="Album Cover"
               />
-              <div className="flex h-full w-full flex-col items-center  justify-center bg-slate-500  p-5 lg:items-start">
+              <div className="flex h-full w-full flex-col items-center  justify-center   p-5 lg:items-start">
                 <h1 className="text-4xl font-bold">{review.album.name}</h1>
                 <h2 className=" text-3xl ">{review.album.artist}</h2>
               </div>
             </div>
 
-            <div className="flex h-[300px] flex-col gap-4 bg-slate-900 p-5 lg:w-[80%]">
+            <div className="flex h-[300px] flex-col gap-4  p-5 lg:w-[80%]">
               <div className="flex items-center justify-between ">
-                <StarRating rating={review.rating} />
+                <StaticStarRating rating={review.rating} />
 
                 {userOwnsAccount && (
                   <div className="flex gap-2">
-                    <Dialog>
-                      <DialogTrigger>
-                        <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
-                          <Image
-                            src="/pen.svg"
-                            style={{
-                              filter:
-                                "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
-                            }}
-                            alt="edit pen icon"
-                            className=""
-                            width={30}
-                            height={30}
-                          ></Image>
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent className="bg-black">
-                        <DialogHeader className="text-white">
-                          <DialogTitle>Edit review</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="name" className="text-right">
-                              Name
-                            </label>
-                            <input
-                              id="name"
-                              defaultValue="Pedro Duarte"
-                              className="col-span-3 p-2"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <label htmlFor="username" className="text-right">
-                              Username
-                            </label>
-                            <input
-                              id="username"
-                              defaultValue="@peduarte"
-                              className="col-span-3"
-                            />
-                          </div>
-                        </div>
-                        <DialogFooter>
-                          <button
-                            type="submit"
-                            className="bg-dark-navy text-white rounded-md p-2"
-                          >
-                            Save changes
-                          </button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
+                    <DialogTrigger onClick={() => handleEditOpen(review)}>
+                      <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
+                        <Image
+                          src="/pen.svg"
+                          style={{
+                            filter:
+                              "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+                          }}
+                          alt="edit pen icon"
+                          className=""
+                          width={30}
+                          height={30}
+                        ></Image>
+                      </div>
+                    </DialogTrigger>
+
                     <button
                       onClick={() => handleDelete(review, index)}
                       className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800"
@@ -153,8 +170,8 @@ const UserReviews = ({
             </div>
           </div>
         ))}
-      </div>
-    </div>
+      </Dialog>
+    </section>
   );
 };
 

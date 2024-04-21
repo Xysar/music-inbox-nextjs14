@@ -1,8 +1,8 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-const StarRating = ({ rating, handleClick }: any) => {
+
+const StarRating = ({ rating, setRating }: any) => {
   const [hoverRating, setHoverRating] = useState(-1);
 
   const onEnterStar = (index: number) => {
@@ -26,7 +26,7 @@ const StarRating = ({ rating, handleClick }: any) => {
                 alt="star"
                 key={index}
                 onMouseEnter={() => onEnterStar(index)}
-                onClick={() => handleClick(index + 1)}
+                onClick={() => setRating(index + 1)}
                 className=" cursor-pointer duration-300 ease-in-out  hover:scale-125"
               />
             );
@@ -39,7 +39,7 @@ const StarRating = ({ rating, handleClick }: any) => {
                 alt="star"
                 key={index}
                 onMouseEnter={() => onEnterStar(index)}
-                onClick={() => handleClick(index + 1)}
+                onClick={() => setRating(index + 1)}
                 className="cursor-pointer duration-300 ease-in-out hover:scale-125"
               />
             );
@@ -54,7 +54,7 @@ const StarRating = ({ rating, handleClick }: any) => {
               alt="star"
               key={index}
               onMouseEnter={() => onEnterStar(index)}
-              onClick={() => handleClick(index + 1)}
+              onClick={() => setRating(index + 1)}
               className="cursor-pointer duration-300 ease-in-out hover:scale-125"
             />
           );
@@ -67,7 +67,7 @@ const StarRating = ({ rating, handleClick }: any) => {
               alt="star"
               key={index}
               onMouseEnter={() => onEnterStar(index)}
-              onClick={() => handleClick(index + 1)}
+              onClick={() => setRating(index + 1)}
               className="cursor-pointer duration-300 ease-in-out  hover:scale-125"
             />
           );

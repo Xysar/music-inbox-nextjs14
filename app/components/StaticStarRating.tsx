@@ -9,7 +9,7 @@ const StaticStarRating = ({ rating }: { rating: number }) => {
             <Image
               width={50}
               height={50}
-              src="yellow-star.svg"
+              src="/yellow-star.svg"
               alt="star"
               key={index}
               className=" "
@@ -20,7 +20,7 @@ const StaticStarRating = ({ rating }: { rating: number }) => {
             <Image
               width={50}
               height={50}
-              src="star.svg"
+              src="/star.svg"
               alt="star"
               key={index}
               className=" "
