@@ -34,10 +34,6 @@ const CreateReview: React.FC = () => {
 
   const reviewInput = useRef<HTMLTextAreaElement>(null);
 
-  const handleRatingClick = (index: number) => {
-    setRating(index);
-  };
-
   const createReview = async () => {
     const newReview: review = {
       text: reviewInput.current?.value!,
@@ -134,7 +130,7 @@ const CreateReview: React.FC = () => {
               ></textarea>
             </div>
             <div className="mb-10 flex justify-center">
-              <StarRating rating={rating} handleClick={handleRatingClick} />
+              <StarRating rating={rating} setRating={setRating} />
             </div>
             <button
               className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"

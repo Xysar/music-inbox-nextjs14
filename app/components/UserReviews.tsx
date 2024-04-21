@@ -29,6 +29,8 @@ const UserReviews = ({
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
 
+  let exampleName = "asdasdasfasdasfasdasfasdasfasdasdasfasdasdasf";
+
   const handleDelete = async (reviewToDelete: Review, index: number) => {
     setUserReviews(
       userReviews.filter(
@@ -70,86 +72,94 @@ const UserReviews = ({
 
   return (
     <section className="m-4">
-      <Dialog>
-        {!userInfo.reviews && (
-          <p className="text-center text-xl text-white ">No Reviews Made Yet</p>
-        )}
-        <DialogContent className="bg-slate-700 border border-dark-navy">
-          <DialogHeader className="text-white">
-            <DialogTitle>Edit review</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="text" className="text-right text-white">
-                Content:
-              </Label>
-              <Textarea
-                id="text"
-                value={textValue}
-                onChange={(e) => handleInputChange(e)}
-                placeholder=""
-                className="resize-none col-span-3 p-1 bg-slate-200"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-white text-right">Rating:</Label>
-              <div className="col-span-3 ">
-                <StarRating rating={rating} setRating={setRating} />
+      {!userInfo.reviews && (
+        <p className="text-center text-xl text-white ">No Reviews Made Yet</p>
+      )}
+      {userReviews.map((review: any, index: number) => (
+        <div
+          key={review.id}
+          className="mb-4  border-white border rounded-lg flex "
+        >
+          <Image
+            src={review.album.imageId}
+            width={200}
+            className="h-[300px] w-[300px] p-2 rounded-xl "
+            height={200}
+            alt="Album Cover"
+          />
+
+          <div className="w-full  p-5">
+            <div className="flex justify-between mb-4 ">
+              <div className="text-white  flex-1 w-[100px]  overflow-hidden">
+                <h1 className="text-3xl font-bold  ">
+                  {review.album.name.length > 250
+                    ? `${review.album.name.substring(0, 250)}...`
+                    : review.album.name}
+                </h1>
+                <h2 className=" text-2xl ">{review.album.artist}</h2>
               </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="submit"
-              onClick={() => handleEditSubmit()}
-              className="bg-orange-600 text-white rounded-md p-2 border border-dark-navy hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
-            >
-              Save Changes
-            </button>
-          </DialogFooter>
-        </DialogContent>
-
-        {userReviews.map((review: any, index: number) => (
-          <div
-            key={review.id}
-            className="mb-4 flex flex-col justify-between border-white border-2 rounded-lg  lg:flex-row"
-          >
-            <div className="  flex w-full flex-col items-center   lg:flex-row ">
-              <Image
-                src={review.album.imageId}
-                width={200}
-                className="h-[300px] w-[300px] rounded-xl"
-                height={200}
-                alt="Album Cover"
-              />
-              <div className="flex h-full w-full flex-col items-center  justify-center   p-5 lg:items-start">
-                <h1 className="text-4xl font-bold">{review.album.name}</h1>
-                <h2 className=" text-3xl ">{review.album.artist}</h2>
-              </div>
-            </div>
-
-            <div className="flex h-[300px] flex-col gap-4  p-5 lg:w-[80%]">
-              <div className="flex items-center justify-between ">
-                <StaticStarRating rating={review.rating} />
-
+              <div className=" ">
                 {userOwnsAccount && (
-                  <div className="flex gap-2">
-                    <DialogTrigger onClick={() => handleEditOpen(review)}>
-                      <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
-                        <Image
-                          src="/pen.svg"
-                          style={{
-                            filter:
-                              "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
-                          }}
-                          alt="edit pen icon"
-                          className=""
-                          width={30}
-                          height={30}
-                        ></Image>
-                      </div>
-                    </DialogTrigger>
-
+                  <div className=" flex gap-2">
+                    <Dialog>
+                      <DialogTrigger onClick={() => handleEditOpen(review)}>
+                        <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
+                          <Image
+                            src="/pen.svg"
+                            style={{
+                              filter:
+                                "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+                            }}
+                            alt="edit pen icon"
+                            className=""
+                            width={30}
+                            height={30}
+                          ></Image>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="bg-slate-700 border border-dark-navy">
+                        <DialogHeader className="text-white">
+                          <DialogTitle>Edit review</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                              htmlFor="text"
+                              className="text-right text-white"
+                            >
+                              Content:
+                            </Label>
+                            <Textarea
+                              id="text"
+                              value={textValue}
+                              onChange={(e) => handleInputChange(e)}
+                              placeholder=""
+                              className="resize-none col-span-3 p-1 bg-slate-200"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label className="text-white text-right">
+                              Rating:
+                            </Label>
+                            <div className="col-span-3 ">
+                              <StarRating
+                                rating={rating}
+                                setRating={setRating}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <button
+                            type="submit"
+                            onClick={() => handleEditSubmit()}
+                            className="bg-orange-600 text-white rounded-md p-2 border border-dark-navy hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                          >
+                            Save Changes
+                          </button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                     <button
                       onClick={() => handleDelete(review, index)}
                       className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800"
@@ -164,13 +174,21 @@ const UserReviews = ({
                   </div>
                 )}
               </div>
-              <div className="">
-                <p className="m-auto text-white ">{review.text}</p>
-              </div>
+            </div>
+            <div className="mb-4">
+              <StaticStarRating rating={review.rating} />
+            </div>
+            <div className="">
+              <p
+                style={{ whiteSpace: "pre-line" }}
+                className="m-auto text-white "
+              >
+                {review.text}
+              </p>
             </div>
           </div>
-        ))}
-      </Dialog>
+        </div>
+      ))}
     </section>
   );
 };
