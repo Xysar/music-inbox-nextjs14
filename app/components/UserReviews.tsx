@@ -160,17 +160,35 @@ const UserReviews = ({
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
-                    <button
-                      onClick={() => handleDelete(review, index)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800"
-                    >
-                      <Image
-                        src={"/trash-solid.svg"}
-                        width={20}
-                        height={20}
-                        alt="trash can image"
-                      ></Image>
-                    </button>
+                    <Dialog>
+                      <DialogTrigger>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800">
+                          <Image
+                            src={"/trash-solid.svg"}
+                            width={20}
+                            height={20}
+                            alt="trash can image"
+                          ></Image>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="bg-slate-700 border border-dark-navy">
+                        <DialogHeader className="text-white">
+                          <DialogTitle>
+                            Are you sure you want to delete?
+                          </DialogTitle>
+                        </DialogHeader>
+
+                        <DialogFooter>
+                          <button
+                            type="submit"
+                            onClick={() => handleDelete(review, index)}
+                            className="bg-red-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                          >
+                            Delete
+                          </button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 )}
               </div>
