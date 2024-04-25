@@ -29,8 +29,6 @@ const UserReviews = ({
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
 
-  let exampleName = "asdasdasfasdasfasdasfasdasfasdasdasfasdasdasf";
-
   const handleDelete = async (reviewToDelete: Review, index: number) => {
     setUserReviews(
       userReviews.filter(
