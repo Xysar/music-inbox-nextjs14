@@ -51,8 +51,20 @@ const UserReviews = ({
     });
   };
 
-  function handleEditSubmit(): void {
+  async function handleEditSubmit(reviewId: string) {
     console.log(textValue, rating);
+
+    const response = await fetch(`/api/update-review`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewId,
+        textValue,
+        rating,
+      }),
+    });
   }
 
   function handleEditOpen(review: Review): void {
