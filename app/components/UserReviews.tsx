@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "./StarRating";
@@ -24,7 +24,6 @@ const UserReviews = ({
   userOwnsAccount: boolean;
 }) => {
   const [userReviews, setUserReviews] = useState(userInfo.reviews);
-  const [currentForm, setCurrentForm] = useState("");
   const [rating, setRating] = useState(0);
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
