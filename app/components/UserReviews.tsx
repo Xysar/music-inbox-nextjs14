@@ -50,7 +50,7 @@ const UserReviews = ({
     });
   };
 
-  async function handleEditSubmit(reviewId: string) {
+  async function handleEditSubmit() {
     console.log(textValue, rating);
 
     const response = await fetch(`/api/update-review`, {
