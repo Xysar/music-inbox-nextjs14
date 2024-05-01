@@ -40,7 +40,6 @@ export default async function Home() {
       },
     });
     trendingAlbums[i].avgRating = aggregation["_avg"].rating;
-    console.log(trendingAlbums[i]);
   }
 
   return (

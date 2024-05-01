@@ -12,6 +12,7 @@ export const getAlbum = async (mbid: string) => {
           text: true,
           user: {
             select: {
+              id: true,
               image: true,
               name: true,
             },

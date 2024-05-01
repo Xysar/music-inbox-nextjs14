@@ -27,7 +27,7 @@ const UserReviews = ({
   const [rating, setRating] = useState(0);
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
-  const [open, setOpen] = React.useState(false);
+  const [reviewToEdit, setReviewToEdit] = useState(-1);
   const handleDelete = async (reviewToDelete: Review, index: number) => {
     setUserReviews(
       userReviews.filter(
@@ -65,22 +65,24 @@ const UserReviews = ({
         rating,
       }),
     });
-    setOpen(false);
+
     event.preventDefault();
+
     const newUserReviews = userReviews.map((review: any, index: number) => {
       if (index === reviewIndex) {
         return { ...review, rating: rating, text: textValue };
-      }
+      } else return review;
     });
-    setUserReviews(newUserReviews);
 
-    console.log(userReviews);
+    setUserReviews(newUserReviews);
+    setReviewToEdit(-1);
     setTextValue("");
     setRating(-1);
     setReviewId(-1);
   }
 
-  function handleEditOpen(review: Review): void {
+  function handleEditOpen(review: Review, index: number): void {
+    setReviewToEdit(index);
     setTextValue(review.text);
     setRating(review.rating);
     setReviewId(review.id);
@@ -100,7 +102,7 @@ const UserReviews = ({
       {userReviews.map((review: any, index: number) => (
         <div
           key={review.id}
-          className="mb-4  border-white border rounded-lg flex "
+          className="mb-4 border-white border rounded-lg flex "
         >
           <Image
             src={review.album.imageId}
@@ -109,7 +111,6 @@ const UserReviews = ({
             height={200}
             alt="Album Cover"
           />
-
           <div className="w-full  p-5">
             <div className="flex justify-between mb-4 ">
               <div className="text-white  flex-1 w-[100px]  overflow-hidden">
@@ -123,65 +124,42 @@ const UserReviews = ({
               <div className=" ">
                 {userOwnsAccount && (
                   <div className=" flex gap-2">
-                    <Dialog open={open} onOpenChange={setOpen}>
-                      <DialogTrigger onClick={() => handleEditOpen(review)}>
-                        <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
-                          <Image
-                            src="/pen.svg"
-                            style={{
-                              filter:
-                                "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
-                            }}
-                            alt="edit pen icon"
-                            className=""
-                            width={30}
-                            height={30}
-                          ></Image>
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent className="bg-slate-700 border border-dark-navy">
-                        <DialogHeader className="text-white">
-                          <DialogTitle>Edit review</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label
-                              htmlFor="text"
-                              className="text-right text-white"
-                            >
-                              Content:
-                            </Label>
-                            <Textarea
-                              id="text"
-                              value={textValue}
-                              onChange={(e) => handleInputChange(e)}
-                              placeholder=""
-                              className="resize-none col-span-3 p-1 bg-slate-200"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label className="text-white text-right">
-                              Rating:
-                            </Label>
-                            <div className="col-span-3 ">
-                              <StarRating
-                                rating={rating}
-                                setRating={setRating}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <DialogFooter>
-                          <button
-                            type="submit"
-                            onClick={(e) => handleEditSubmit(e, index)}
-                            className="bg-orange-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
-                          >
-                            Save Changes
-                          </button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
+                    {reviewToEdit !== index ? (
+                      <button
+                        onClick={() => handleEditOpen(review, index)}
+                        className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full "
+                      >
+                        <Image
+                          src="/pen.svg"
+                          style={{
+                            filter:
+                              "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+                          }}
+                          alt="edit pen icon"
+                          className=""
+                          width={30}
+                          height={30}
+                        ></Image>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setReviewToEdit(-1)}
+                        className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full "
+                      >
+                        <Image
+                          src="/x-symbol.svg"
+                          style={{
+                            filter:
+                              "brightness(0) saturate(100%) invert(91%) sepia(100%) saturate(0%) hue-rotate(45deg) brightness(103%) contrast(101%)",
+                          }}
+                          alt="exit icon"
+                          className=""
+                          width={30}
+                          height={30}
+                        ></Image>
+                      </button>
+                    )}
+
                     <Dialog>
                       <DialogTrigger>
                         <div className="flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-slate-800">
@@ -214,17 +192,42 @@ const UserReviews = ({
                 )}
               </div>
             </div>
-            <div className="mb-4">
-              <StaticStarRating rating={review.rating} />
-            </div>
-            <div className="">
-              <p
-                style={{ whiteSpace: "pre-line" }}
-                className="m-auto text-white "
-              >
-                {review.text}
-              </p>
-            </div>
+
+            {reviewToEdit === index && (
+              <div className="">
+                <StarRating rating={rating} setRating={setRating} />
+                <div className="">
+                  <textarea
+                    style={{ whiteSpace: "pre-line" }}
+                    onChange={(e) => handleInputChange(e)}
+                    className="m-auto  bg-slate-800 w-full text-white my-2"
+                    value={textValue}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  onClick={(e) => handleEditSubmit(e, index)}
+                  className="bg-orange-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                >
+                  Save Changes
+                </button>
+              </div>
+            )}
+            {reviewToEdit !== index && (
+              <div className="">
+                <div className="mb-4">
+                  <StaticStarRating rating={review.rating} />
+                </div>
+                <div className="">
+                  <p
+                    style={{ whiteSpace: "pre-line" }}
+                    className="m-auto text-white  "
+                  >
+                    {review.text}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ))}

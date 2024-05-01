@@ -44,7 +44,6 @@ const CreateReview: React.FC = () => {
       albumImageId: currentAlbum?.image[2]["#text"],
       userId: session?.user?.id,
     };
-    console.log(newReview);
     const response = await fetch(`/api/create-review`, {
       method: "POST",
       headers: {

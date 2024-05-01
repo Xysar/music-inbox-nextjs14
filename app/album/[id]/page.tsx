@@ -51,7 +51,7 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
     return minutes + ":" + remainingSecondsString;
   };
   return (
-    <section className="relative min-h-screen bg-slate-900">
+    <section className="relative bg-slate-900 px-2">
       <div className="z-[5] my-10 w-full rounded-lg bg-slate-800 p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
         <div className="flex justify-between ">
           <h1 className="text-3xl">{albumData?.name}</h1>
@@ -60,7 +60,7 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
 
         {albumData && (
           <div className="mt-10 flex flex-col gap-6 text-lg sm:flex-row">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mx-auto">
               <Image
                 src={`${albumData?.image[3]["#text"]}`}
                 alt="album picture"
@@ -86,14 +86,14 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
         )}
       </div>
 
-      <div className="m-auto max-w-[1300px]">
+      <div className="">
         {!albumReviews && (
           <p className="text-center text-3xl text-white">No Reviews Made Yet</p>
         )}
         {albumReviews?.map((review: any, index: number) => (
           <div
             key={index}
-            className="flex  overflow-hidden rounded-lg   bg-slate-950 text-white "
+            className="mb-4 border-white border rounded-lg flex flex-col sm:flex-row"
           >
             <div className="float-left inline-block flex-grow-0 p-8">
               <Image
@@ -101,14 +101,27 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
                 alt=""
                 width={200}
                 height={200}
-                className="mr-5 inline-block h-[50px] w-[50px] rounded-full object-cover"
+                className="m-auto h-[100px] w-[100px] rounded-full object-cover"
               />
-              <h1 className="inline-block text-2xl ">{review.user.name}</h1>
+              <h1 className="text-center  text-2xl text-white ">
+                {review.user.name}
+              </h1>
             </div>
-            <div className="flex flex-1 justify-between p-4">
-              <StaticStarRating rating={review.rating} />
+            <div className="w-full  p-5">
+              <div className="">
+                <div className="mb-4">
+                  <StaticStarRating rating={review.rating} />
+                </div>
+                <div className="">
+                  <p
+                    style={{ whiteSpace: "pre-line" }}
+                    className="m-auto text-white  "
+                  >
+                    {review.text}
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-lg">{review.text}</p>
           </div>
         ))}
       </div>
