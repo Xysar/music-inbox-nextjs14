@@ -64,6 +64,9 @@ const UserReviews = ({
         rating,
       }),
     });
+    setTextValue("");
+    setRating(-1);
+    setReviewId(-1);
   }
 
   function handleEditOpen(review: Review): void {
