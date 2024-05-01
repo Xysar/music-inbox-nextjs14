@@ -2,7 +2,7 @@ import React from "react";
 import { getAlbum } from "../../../lib/services/albums";
 import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
-
+import Link from "next/link";
 const getAlbumInfo = async (albumId: string) => {
   const response = await fetch(
     `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&mbid=${albumId}&format=json`
@@ -95,17 +95,19 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
             key={index}
             className="mb-4 border-white border rounded-lg flex flex-col sm:flex-row"
           >
-            <div className="float-left inline-block flex-grow-0 p-8">
-              <Image
-                src={`${review?.user?.image}`}
-                alt=""
-                width={200}
-                height={200}
-                className="m-auto h-[100px] w-[100px] rounded-full object-cover"
-              />
-              <h1 className="text-center  text-2xl text-white ">
-                {review.user.name}
-              </h1>
+            <div className="float-left inline-block flex-grow-0 p-8 hover:bg-slate-500 duration-150 ease-in-out rounded-l-lg">
+              <Link href={`/user/${review?.user?.id}`}>
+                <Image
+                  src={`${review?.user?.image}`}
+                  alt=""
+                  width={200}
+                  height={200}
+                  className="m-auto h-[100px] w-[100px] rounded-full object-cover"
+                />
+                <h1 className="text-center  text-2xl text-white ">
+                  {review.user.name}
+                </h1>
+              </Link>
             </div>
             <div className="w-full  p-5">
               <div className="">

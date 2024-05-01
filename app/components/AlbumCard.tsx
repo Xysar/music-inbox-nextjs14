@@ -15,10 +15,6 @@ const AlbumCard = ({
 }) => {
   const [showTracklist, setShowTracklist] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(currentAlbum);
-  }, [currentAlbum]);
-
   const router = useRouter();
 
   const returnTracklist = () => {
