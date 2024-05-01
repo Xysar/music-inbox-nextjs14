@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "./StarRating";
 import StaticStarRating from "./StaticStarRating";
 import { Review } from "@prisma/client";
+
 const UserReviews = ({
   userInfo,
   userOwnsAccount,
@@ -51,8 +51,6 @@ const UserReviews = ({
   };
 
   async function handleEditSubmit() {
-    console.log(textValue, rating);
-
     const response = await fetch(`/api/update-review`, {
       method: "PUT",
       headers: {
@@ -67,7 +65,6 @@ const UserReviews = ({
   }
 
   function handleEditOpen(review: Review): void {
-    console.log(textValue);
     setTextValue(review.text);
     setRating(review.rating);
     setReviewId(review.id);
@@ -162,7 +159,7 @@ const UserReviews = ({
                           <button
                             type="submit"
                             onClick={() => handleEditSubmit()}
-                            className="bg-orange-600 text-white rounded-md p-2 border border-dark-navy hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                            className="bg-orange-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
                           >
                             Save Changes
                           </button>
@@ -186,12 +183,11 @@ const UserReviews = ({
                             Are you sure you want to delete?
                           </DialogTitle>
                         </DialogHeader>
-
                         <DialogFooter>
                           <button
                             type="submit"
                             onClick={() => handleDelete(review, index)}
-                            className="bg-red-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                            className="bg-red-600 text-white rounded-md p-2 hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
                           >
                             Delete
                           </button>

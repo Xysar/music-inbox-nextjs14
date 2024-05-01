@@ -3,15 +3,12 @@ import { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function PUT(request: NextRequest) {
-  const { updatedReview: review } = await request.json();
-
+  const review = await request.json();
   const updatedReview = await prisma.review.update({
-    where: { id: review.albumId },
+    where: { id: review.reviewId },
     data: {
       rating: review.rating,
-      text: review.text,
-      albumId: review.albumId,
-      userId: review.userId,
+      text: review.textValue,
     },
   });
   return NextResponse.json({ updatedReview });
