@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "./StarRating";
 import StaticStarRating from "./StaticStarRating";
 import { Review } from "@prisma/client";
+
 const UserReviews = ({
   userInfo,
   userOwnsAccount,
@@ -27,7 +27,7 @@ const UserReviews = ({
   const [rating, setRating] = useState(0);
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
-
+  const [open, setOpen] = React.useState(false);
   const handleDelete = async (reviewToDelete: Review, index: number) => {
     setUserReviews(
       userReviews.filter(
@@ -50,9 +50,10 @@ const UserReviews = ({
     });
   };
 
-  async function handleEditSubmit() {
-    console.log(textValue, rating);
-
+  async function handleEditSubmit(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    reviewIndex: number
+  ) {
     const response = await fetch(`/api/update-review`, {
       method: "PUT",
       headers: {
@@ -64,13 +65,22 @@ const UserReviews = ({
         rating,
       }),
     });
+    setOpen(false);
+    event.preventDefault();
+    const newUserReviews = userReviews.map((review: any, index: number) => {
+      if (index === reviewIndex) {
+        return { ...review, rating: rating, text: textValue };
+      }
+    });
+    setUserReviews(newUserReviews);
+
+    console.log(userReviews);
     setTextValue("");
     setRating(-1);
     setReviewId(-1);
   }
 
   function handleEditOpen(review: Review): void {
-    console.log(textValue);
     setTextValue(review.text);
     setRating(review.rating);
     setReviewId(review.id);
@@ -113,7 +123,7 @@ const UserReviews = ({
               <div className=" ">
                 {userOwnsAccount && (
                   <div className=" flex gap-2">
-                    <Dialog>
+                    <Dialog open={open} onOpenChange={setOpen}>
                       <DialogTrigger onClick={() => handleEditOpen(review)}>
                         <div className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full ">
                           <Image
@@ -164,8 +174,8 @@ const UserReviews = ({
                         <DialogFooter>
                           <button
                             type="submit"
-                            onClick={() => handleEditSubmit()}
-                            className="bg-orange-600 text-white rounded-md p-2 border border-dark-navy hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                            onClick={(e) => handleEditSubmit(e, index)}
+                            className="bg-orange-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
                           >
                             Save Changes
                           </button>
@@ -189,12 +199,11 @@ const UserReviews = ({
                             Are you sure you want to delete?
                           </DialogTitle>
                         </DialogHeader>
-
                         <DialogFooter>
                           <button
                             type="submit"
                             onClick={() => handleDelete(review, index)}
-                            className="bg-red-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
+                            className="bg-red-600 text-white rounded-md p-2 hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
                           >
                             Delete
                           </button>
