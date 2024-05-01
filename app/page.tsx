@@ -29,15 +29,20 @@ export default async function Home() {
     "51467269-3122-3d7e-92b2-0f0a694d30c1"
   );
   const trendingAlbums = await getTrendingAlbums();
-  const aggregations = await prisma.review.aggregate({
-    _avg: {
-      rating: true,
-    },
-    where: {
-      albumId: trendingAlbums[0].id,
-    },
-  });
-  console.log(aggregations);
+
+  for (let i = 0; i < 5; i++) {
+    const aggregation = await prisma.review.aggregate({
+      _avg: {
+        rating: true,
+      },
+      where: {
+        albumId: trendingAlbums[i].id,
+      },
+    });
+    trendingAlbums[i].avgRating = aggregation["_avg"].rating;
+    console.log(trendingAlbums[i]);
+  }
+
   return (
     <div className=" ">
       <Introduction />
