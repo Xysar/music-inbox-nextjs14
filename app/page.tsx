@@ -26,10 +26,10 @@ const getTrendingAlbums = async () => {
   return trendingAlbums;
 };
 
-export default async function Home({ searchParams }: { searchParams: any }) {
+export default async function Home() {
   const initialAlbum = await getInitialAlbum(
     "51467269-3122-3d7e-92b2-0f0a694d30c1"
-  );
+  ); //Daft Punk's Discovery Album
   const trendingAlbums = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
@@ -56,8 +56,9 @@ export default async function Home({ searchParams }: { searchParams: any }) {
     }
     return result;
   }
+
   const handleLoginSpotify = () => {
-    var scope = "user-read-private user-read-email";
+    var scope = "user-read-private user-read-email user-top-read";
     var redirect_uri = "http://localhost:3000/callback";
     var state = generateRandomString(16);
     const params = {
