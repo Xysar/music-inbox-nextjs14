@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 const TopAlbums = ({ trendingAlbums }: { trendingAlbums: any }) => {
   return (
-    <div className="mx-4 flex-1 rounded-lg bg-slate-800 p-4 text-white">
+    <div className="mx-4 flex-1 rounded-lg bg-dark-navy p-4 text-white">
       <h2 className=" pb-4  text-3xl">Trending Albums</h2>
       <ul className="flex flex-col  items-center justify-evenly gap-10   md:flex-row ">
         {trendingAlbums?.map((album: any, index: any) => (
