@@ -2,8 +2,11 @@ import { redirect } from "next/navigation";
 import Introduction from "./components/Introduction";
 import MainSearch from "./components/MainSearch";
 import TopAlbums from "./components/TopAlbums";
+import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
+var base64 = require("base-64");
 import queryString from "query-string";
+import SpotifySearch from "./components/SpotifySearch";
 const getInitialAlbum = async (mbid: string) => {
   const response = await fetch(
     `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&mbid=${mbid}&format=json`
@@ -26,10 +29,10 @@ const getTrendingAlbums = async () => {
   return trendingAlbums;
 };
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: any }) {
   const initialAlbum = await getInitialAlbum(
     "51467269-3122-3d7e-92b2-0f0a694d30c1"
-  ); //Daft Punk's Discovery Album
+  );
   const trendingAlbums = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
@@ -56,11 +59,11 @@ export default async function Home() {
     }
     return result;
   }
-
   const handleLoginSpotify = () => {
-    var scope = "user-read-private user-read-email user-top-read";
+    var scope = "user-read-private user-read-email";
     var redirect_uri = "http://localhost:3000/callback";
     var state = generateRandomString(16);
+
     const params = {
       response_type: "code",
       client_id: process.env.SPOTIFY_CLIENTID!,
@@ -76,6 +79,27 @@ export default async function Home() {
     return baseUrl.toString();
   };
 
+  const refreshAccessToken = async () => {
+    "use server";
+    const refreshToken = cookies().get("refresh_token");
+
+    const res = fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Basic ${base64.encode(
+          `${process.env.SPOTIFY_CLIENTID}:${process.env.SPOTIFY_SECRET}`
+        )}`,
+      },
+      body: queryString.stringify({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken!.value,
+      }),
+    }).then((response) => response.json());
+
+    return res;
+  };
+
   const loginParams = handleLoginSpotify();
 
   return (
@@ -89,6 +113,7 @@ export default async function Home() {
       <a className="p-4 bg-green-800" href={loginParams}>
         Log in Spotify
       </a>
+      <SpotifySearch refreshAccessToken={refreshAccessToken} />
       <section id="profile">
         <h2>
           Logged in as <span id="displayName"></span>

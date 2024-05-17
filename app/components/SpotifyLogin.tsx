@@ -1,13 +1,22 @@
 "use client";
 
-import React from "react";
-
-const SpotifyLogin = () => {
-  return (
-    <a className="p-4 bg-green-800" href={loginParams}>
-      Log in Spotify
-    </a>
-  );
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
+const SpotifyLogin = ({
+  accessToken,
+  setRefreshToken,
+}: {
+  accessToken: string;
+  setRefreshToken: any;
+}) => {
+  useEffect(() => {
+    setRefreshToken();
+    localStorage.setItem("accessToken", accessToken);
+    setTimeout(() => router.push("/"), 5000);
+  }, []);
+  const router = useRouter();
+  return <div className=""></div>;
 };
 
 export default SpotifyLogin;
