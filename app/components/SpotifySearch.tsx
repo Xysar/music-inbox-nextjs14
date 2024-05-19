@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 const SpotifySearch = ({ refreshAccessToken }: { refreshAccessToken: any }) => {
   const [accessToken, setAccessToken] = useState("");
-  const [albums, setAlbums] = useState({});
+  const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
     searchAlbums("test", localStorage.getItem("accessToken")!);
@@ -28,7 +28,8 @@ const SpotifySearch = ({ refreshAccessToken }: { refreshAccessToken: any }) => {
         handleError();
       }
     });
-    setAlbums(result);
+    const items = result.albums?.items;
+    setAlbums(items);
   };
 
   const handleError = async () => {
@@ -37,7 +38,13 @@ const SpotifySearch = ({ refreshAccessToken }: { refreshAccessToken: any }) => {
     setAccessToken(res.access_token);
   };
 
-  return <div>SpotifySearch</div>;
+  return (
+    <div>
+      {albums?.map((item, index) => (
+        <div key={index}>{item.name}</div>
+      ))}
+    </div>
+  );
 };
 
 export default SpotifySearch;

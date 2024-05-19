@@ -4,7 +4,11 @@ import { Album } from "@/types";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
-const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
+const SearchBar = ({
+  setCurrentAlbum,
+  setCurrentAlbumId,
+  refreshAccessToken,
+}: any) => {
   const albumInput = useRef<HTMLInputElement>(null);
   const searchBar = useRef<HTMLDivElement>(null);
 
@@ -23,6 +27,10 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
     };
   }, []);
 
+  useEffect(() => {
+    loadAlbum("4aawyAB9vmqN3uQ7FjRGTy");
+  }, []);
+
   const checkClick = (e: any) => {
     if (searchBar.current && !searchBar.current.contains(e.target)) {
       setdisplayResults(false);
@@ -30,11 +38,37 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
       setdisplayResults(true);
     }
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (albumInput.current) {
-      showResults(albumInput.current.value);
+      searchAlbums(albumInput.current.value);
     }
+  };
+
+  const searchAlbums = async (query: string) => {
+    const result = await fetch(
+      `https://api.spotify.com/v1/search?q=${query}&type=album&limit=5`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")!}`,
+        },
+      }
+    ).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        handleError();
+      }
+    });
+    const items = result.albums?.items;
+    setCurrentResults(items);
+    setdisplayResults(true);
+  };
+
+  const handleError = async () => {
+    const res = await refreshAccessToken();
+    localStorage.setItem("accessToken", res.access_token);
   };
 
   const showResults = async (input: string) => {
@@ -45,18 +79,28 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
     setdisplayResults(true);
   };
 
-  const loadAlbum = async (mbid: string) => {
-    const queriedAlbumId = await fetch(`api/lastfm/get-album-id?mbid=${mbid}`);
-    const {
-      albumData: { album: albumData },
-    } = await queriedAlbumId.json();
-
-    setCurrentAlbum(albumData);
-    setCurrentAlbumId(mbid);
+  const loadAlbum = async (id: string) => {
+    const queriedAlbumId = await fetch(
+      `https://api.spotify.com/v1/albums/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")!}`,
+        },
+      }
+    ).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        handleError();
+      }
+    });
+    console.log(queriedAlbumId);
+    setCurrentAlbum(queriedAlbumId);
+    setCurrentAlbumId(id);
   };
 
   const handleAlbumClick = (result: Album) => {
-    loadAlbum(result.mbid);
+    loadAlbum(result.id);
     setdisplayResults(false);
   };
 
@@ -85,14 +129,14 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
                 >
                   <Image
                     alt="album cover"
-                    src={result.image[0]["#text"]}
-                    width={40}
-                    height={40}
+                    src={result.images[2].url}
+                    width={result.images[2].width}
+                    height={result.images[2].height}
                     className="w-10 h-10"
                   />
                   <div className="">
                     <h2 className="">{result.name}</h2>
-                    <h3 className="">{result.artist}</h3>
+                    <h3 className="">{result.artists[0].name}</h3>
                   </div>
                 </div>
               ))}

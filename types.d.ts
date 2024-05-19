@@ -1,11 +1,27 @@
 export interface AlbumImage {
-  "#text": string;
-  size: string;
+  height: number;
+  width: number;
+  url: string;
+}
+export interface Artist {
+  id: string;
+  name: string;
+}
+
+export interface Track {
+  artists: Array<Artist>;
+  duration_ms: number;
+  id: string;
+  name: string;
+  href: string;
 }
 
 export interface Album {
   name: string;
-  artist: string;
-  image: Array<AlbumImage>;
-  mbid: string;
+  artists: Array<Artist>;
+  images: Array<AlbumImage>;
+  id: string;
+  tracks: {
+    items: Array<Track>;
+  };
 }

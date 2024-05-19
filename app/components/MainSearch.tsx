@@ -8,18 +8,21 @@ import SearchBar from "./SearchBar";
 const MainSearch = ({
   initialAlbum,
   initialAlbumId,
+  refreshAccessToken,
 }: {
   initialAlbum: Album;
   initialAlbumId: string;
+  refreshAccessToken: any;
 }) => {
-  const [currentAlbum, setCurrentAlbum] = useState<any>(initialAlbum);
-  const [currentAlbumId, setCurrentAlbumId] = useState<string>(initialAlbumId);
+  const [currentAlbum, setCurrentAlbum] = useState<any>(null);
+  const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
 
   return (
     <div className="px-5">
       <SearchBar
         setCurrentAlbum={setCurrentAlbum}
         setCurrentAlbumId={setCurrentAlbumId}
+        refreshAccessToken={refreshAccessToken}
       />
       <AlbumCard
         currentAlbum={currentAlbum}

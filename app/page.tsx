@@ -30,9 +30,7 @@ const getTrendingAlbums = async () => {
 };
 
 export default async function Home({ searchParams }: { searchParams: any }) {
-  const initialAlbum = await getInitialAlbum(
-    "51467269-3122-3d7e-92b2-0f0a694d30c1"
-  );
+  const initialAlbum = await getInitialAlbum("4aawyAB9vmqN3uQ7FjRGTy");
   const trendingAlbums = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
@@ -108,35 +106,13 @@ export default async function Home({ searchParams }: { searchParams: any }) {
       <MainSearch
         initialAlbum={initialAlbum}
         initialAlbumId={"51467269-3122-3d7e-92b2-0f0a694d30c1"}
+        refreshAccessToken={refreshAccessToken}
       />
       <TopAlbums trendingAlbums={trendingAlbums} />
       <a className="p-4 bg-green-800" href={loginParams}>
         Log in Spotify
       </a>
       <SpotifySearch refreshAccessToken={refreshAccessToken} />
-      <section id="profile">
-        <h2>
-          Logged in as <span id="displayName"></span>
-        </h2>
-        <span id="avatar"></span>
-        <ul>
-          <li>
-            User ID: <span id="id"></span>
-          </li>
-          <li>
-            Email: <span id="email"></span>
-          </li>
-          <li>
-            Spotify URI: <a id="uri" href="#"></a>
-          </li>
-          <li>
-            Link: <a id="url" href="#"></a>
-          </li>
-          <li>
-            Profile Image: <span id="imgUrl"></span>
-          </li>
-        </ul>
-      </section>
     </div>
   );
 }
