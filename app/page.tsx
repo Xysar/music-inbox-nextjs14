@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 var base64 = require("base-64");
 import queryString from "query-string";
 import SpotifySearch from "./components/SpotifySearch";
+
 const getInitialAlbum = async (mbid: string) => {
   const response = await fetch(
     `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&mbid=${mbid}&format=json`

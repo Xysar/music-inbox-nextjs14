@@ -21,28 +21,20 @@ const AlbumCard = ({
   const returnTracklist = () => {
     if (currentAlbum?.tracks) {
       return (
-        <div className="flex justify-between ">
-          <div className="flex gap-2">
-            <p>1.</p>
-            <p>{currentAlbum?.tracks.items[0].name}</p>
-          </div>
+        <div className="flex justify-between  ">
+          <p>1.&nbsp;&nbsp;{currentAlbum?.tracks.items[0].name}</p>
+
           <p className="">
-            {convertSecondsToMinutes(
-              currentAlbum?.tracks?.items[0].duration_ms
-            )}
+            {convertMillisToSeconds(currentAlbum?.tracks?.items[0].duration_ms)}
           </p>
         </div>
       );
     } else return <div>No Tracklist Info Found</div>;
   };
 
-  const convertSecondsToMinutes = (seconds: number) => {
-    return seconds;
-    // let minutes = Math.floor(seconds / 60);
-    // let remainingSeconds = seconds % 60;
-    // let remainingSecondsString =
-    //   remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds;
-    // return minutes + ":" + remainingSecondsString;
+  const convertMillisToSeconds = (milliseconds: number) => {
+    const date = new Date(milliseconds);
+    return `${date.getMinutes()}:${date.getSeconds()}`;
   };
 
   return (
@@ -63,16 +55,16 @@ const AlbumCard = ({
                 className="aspect-square w-[300px] "
               />
             </div>
-            <div className=" flex flex-col justify-between">
+            <div className=" flex flex-col justify-between w-full">
               <div
                 onClick={() => setShowTracklist((prev) => !prev)}
-                className="relative mb-3 box-border w-full cursor-pointer  border-gray-600 bg-black p-2 hover:bg-slate-900 "
+                className="relative  mb-3 box-border w-full cursor-pointer  border-gray-600 bg-black p-2 hover:bg-slate-900 "
               >
                 {returnTracklist()}
                 <div
                   className={`${
                     showTracklist ? "block" : "hidden"
-                  } absolute left-0 top-0 h-40 w-[100%]   overflow-x-hidden  `}
+                  } absolute left-0 top-0  h-40 w-[100%]   overflow-x-hidden  `}
                 >
                   {currentAlbum?.tracks?.items.map(
                     (curTrack: any, index: number) => {
@@ -86,7 +78,7 @@ const AlbumCard = ({
                             <p>{curTrack.name}</p>
                           </div>
                           <p className="">
-                            {convertSecondsToMinutes(curTrack.duration_ms)}
+                            {convertMillisToSeconds(curTrack.duration_ms)}
                           </p>
                         </div>
                       );

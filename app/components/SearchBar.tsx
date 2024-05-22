@@ -71,14 +71,6 @@ const SearchBar = ({
     localStorage.setItem("accessToken", res.access_token);
   };
 
-  const showResults = async (input: string) => {
-    let response = await fetch(`api/lastfm/get-album-matches?name=${input}`);
-    const { albumMatches } = await response.json();
-    console.log(albumMatches);
-    setCurrentResults(albumMatches.album);
-    setdisplayResults(true);
-  };
-
   const loadAlbum = async (id: string) => {
     const queriedAlbumId = await fetch(
       `https://api.spotify.com/v1/albums/${id}`,
@@ -92,9 +84,10 @@ const SearchBar = ({
         return response.json();
       } else {
         handleError();
+        loadAlbum(id);
       }
     });
-    console.log(queriedAlbumId);
+
     setCurrentAlbum(queriedAlbumId);
     setCurrentAlbumId(id);
   };

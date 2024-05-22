@@ -1,4 +1,5 @@
 "use client";
+import { Album } from "@/types";
 import React, { useEffect, useState } from "react";
 
 const SpotifySearch = ({ refreshAccessToken }: { refreshAccessToken: any }) => {
@@ -40,7 +41,7 @@ const SpotifySearch = ({ refreshAccessToken }: { refreshAccessToken: any }) => {
 
   return (
     <div>
-      {albums?.map((item, index) => (
+      {albums?.map((item: Album, index) => (
         <div key={index}>{item.name}</div>
       ))}
     </div>
