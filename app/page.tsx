@@ -9,12 +9,23 @@ import queryString from "query-string";
 import SpotifySearch from "./components/SpotifySearch";
 
 const getInitialAlbum = async (mbid: string) => {
-  const response = await fetch(
-    `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${process.env.NEXT_PUBLIC_LASTFM_KEY}&mbid=${mbid}&format=json`
-  );
-  const { album: albumData } = await response.json();
-
-  return albumData;
+  // const result = await fetch(
+  //   "https://api.spotify.com/v1/search?q=gorillaz&type=album&limit=5",
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   }
+  // ).then((response) => {
+  //   if (response.ok) {
+  //     return response.json();
+  //   } else {
+  //     // handleError();
+  //   }
+  // });
+  // const items = result.albums?.items;
+  // return items;
+  return {};
 };
 
 const getTrendingAlbums = async () => {
@@ -28,6 +39,13 @@ const getTrendingAlbums = async () => {
   });
 
   return trendingAlbums;
+};
+
+const getAccessToken = async () => {
+  const result = await fetch(
+    "http://localhost:3000/api/spotify/get-album"
+  ).then((response) => response.json());
+  return result;
 };
 
 export default async function Home({ searchParams }: { searchParams: any }) {
@@ -100,20 +118,23 @@ export default async function Home({ searchParams }: { searchParams: any }) {
   };
 
   const loginParams = handleLoginSpotify();
+  const accessToken = await getAccessToken();
+
+  console.log(cookies().get("access-token"));
 
   return (
     <div className=" ">
       <Introduction />
-      <MainSearch
+      {/* <MainSearch
         initialAlbum={initialAlbum}
         initialAlbumId={"51467269-3122-3d7e-92b2-0f0a694d30c1"}
         refreshAccessToken={refreshAccessToken}
-      />
+      /> */}
       <TopAlbums trendingAlbums={trendingAlbums} />
-      <a className="p-4 bg-green-800" href={loginParams}>
+      {/* <a className="p-4 bg-green-800" href={loginParams}>
         Log in Spotify
-      </a>
-      <SpotifySearch refreshAccessToken={refreshAccessToken} />
+      </a> */}
+      {/* <SpotifySearch refreshAccessToken={refreshAccessToken} /> */}
     </div>
   );
 }
