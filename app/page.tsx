@@ -3,6 +3,7 @@ import Introduction from "./components/Introduction";
 import MainSearch from "./components/MainSearch";
 import TopAlbums from "./components/TopAlbums";
 import { cookies } from "next/headers";
+import { getTopTracks } from "@/lib/spotifyToken";
 import prisma from "@/lib/prisma";
 var base64 = require("base-64");
 import queryString from "query-string";
@@ -117,10 +118,8 @@ export default async function Home({ searchParams }: { searchParams: any }) {
     return res;
   };
 
-  const loginParams = handleLoginSpotify();
-  const accessToken = await getAccessToken();
-
-  console.log(cookies().get("access-token"));
+  let data = await getTopTracks();
+  console.log(data);
 
   return (
     <div className=" ">
