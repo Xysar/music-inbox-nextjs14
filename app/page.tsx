@@ -3,7 +3,7 @@ import Introduction from "./components/Introduction";
 import MainSearch from "./components/MainSearch";
 import TopAlbums from "./components/TopAlbums";
 import { cookies } from "next/headers";
-import { getTopTracks } from "@/lib/spotifyToken";
+import { getAlbum, searchAlbums } from "@/lib/spotify";
 import prisma from "@/lib/prisma";
 var base64 = require("base-64");
 import queryString from "query-string";
@@ -117,13 +117,13 @@ export default async function Home({ searchParams }: { searchParams: any }) {
 
     return res;
   };
-
+  const firstAlbum = "4aawyAB9vmqN3uQ7FjRGTy";
   let data = await getTopTracks();
-  console.log(data);
 
   return (
     <div className=" ">
       <Introduction />
+
       {/* <MainSearch
         initialAlbum={initialAlbum}
         initialAlbumId={"51467269-3122-3d7e-92b2-0f0a694d30c1"}

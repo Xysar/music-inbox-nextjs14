@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { getAccessToken } from "@/lib/spotifyToken";
+import { getAccessToken } from "@/lib/spotify";
 import queryString from "query-string";
 var base64 = require("base-64");
 
