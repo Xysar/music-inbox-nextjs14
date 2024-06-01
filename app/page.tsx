@@ -9,26 +9,6 @@ var base64 = require("base-64");
 import queryString from "query-string";
 import SpotifySearch from "./components/SpotifySearch";
 
-const getInitialAlbum = async (mbid: string) => {
-  // const result = await fetch(
-  //   "https://api.spotify.com/v1/search?q=gorillaz&type=album&limit=5",
-  //   {
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   }
-  // ).then((response) => {
-  //   if (response.ok) {
-  //     return response.json();
-  //   } else {
-  //     // handleError();
-  //   }
-  // });
-  // const items = result.albums?.items;
-  // return items;
-  return {};
-};
-
 const getTrendingAlbums = async () => {
   const trendingAlbums = await prisma.album.findMany({
     take: 5,
@@ -42,15 +22,8 @@ const getTrendingAlbums = async () => {
   return trendingAlbums;
 };
 
-const getAccessToken = async () => {
-  const result = await fetch(
-    "http://localhost:3000/api/spotify/get-album"
-  ).then((response) => response.json());
-  return result;
-};
-
 export default async function Home({ searchParams }: { searchParams: any }) {
-  const initialAlbum = await getInitialAlbum("4aawyAB9vmqN3uQ7FjRGTy");
+  const initialAlbum = await getAlbum("4aawyAB9vmqN3uQ7FjRGTy");
   const trendingAlbums = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
@@ -97,43 +70,35 @@ export default async function Home({ searchParams }: { searchParams: any }) {
     return baseUrl.toString();
   };
 
-  const refreshAccessToken = async () => {
-    "use server";
-    const refreshToken = cookies().get("refresh_token");
+  // const refreshAccessToken = async () => {
+  //   "use server";
+  //   const refreshToken = cookies().get("refresh_token");
 
-    const res = fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${base64.encode(
-          `${process.env.SPOTIFY_CLIENTID}:${process.env.SPOTIFY_SECRET}`
-        )}`,
-      },
-      body: queryString.stringify({
-        grant_type: "refresh_token",
-        refresh_token: refreshToken!.value,
-      }),
-    }).then((response) => response.json());
+  //   const res = fetch("https://accounts.spotify.com/api/token", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/x-www-form-urlencoded",
+  //       Authorization: `Basic ${base64.encode(
+  //         `${process.env.SPOTIFY_CLIENTID}:${process.env.SPOTIFY_SECRET}`
+  //       )}`,
+  //     },
+  //     body: queryString.stringify({
+  //       grant_type: "refresh_token",
+  //       refresh_token: refreshToken!.value,
+  //     }),
+  //   }).then((response) => response.json());
 
-    return res;
-  };
-  const firstAlbum = "4aawyAB9vmqN3uQ7FjRGTy";
-  let data = await getTopTracks();
+  //   return res;
+  // };
 
   return (
     <div className=" ">
       <Introduction />
-
-      {/* <MainSearch
+      <MainSearch
         initialAlbum={initialAlbum}
-        initialAlbumId={"51467269-3122-3d7e-92b2-0f0a694d30c1"}
-        refreshAccessToken={refreshAccessToken}
-      /> */}
+        initialAlbumId={"4aawyAB9vmqN3uQ7FjRGTy"}
+      />
       <TopAlbums trendingAlbums={trendingAlbums} />
-      {/* <a className="p-4 bg-green-800" href={loginParams}>
-        Log in Spotify
-      </a> */}
-      {/* <SpotifySearch refreshAccessToken={refreshAccessToken} /> */}
     </div>
   );
 }

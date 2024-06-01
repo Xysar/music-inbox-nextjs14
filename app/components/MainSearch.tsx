@@ -8,11 +8,9 @@ import SearchBar from "./SearchBar";
 const MainSearch = ({
   initialAlbum,
   initialAlbumId,
-  refreshAccessToken,
 }: {
   initialAlbum: Album;
   initialAlbumId: string;
-  refreshAccessToken: any;
 }) => {
   const [currentAlbum, setCurrentAlbum] = useState<any>(null);
   const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
@@ -22,7 +20,6 @@ const MainSearch = ({
       <SearchBar
         setCurrentAlbum={setCurrentAlbum}
         setCurrentAlbumId={setCurrentAlbumId}
-        refreshAccessToken={refreshAccessToken}
       />
       <AlbumCard
         currentAlbum={currentAlbum}

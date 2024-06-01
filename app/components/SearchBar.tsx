@@ -4,11 +4,7 @@ import { Album } from "@/types";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
-const SearchBar = ({
-  setCurrentAlbum,
-  setCurrentAlbumId,
-  refreshAccessToken,
-}: any) => {
+const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
   const albumInput = useRef<HTMLInputElement>(null);
   const searchBar = useRef<HTMLDivElement>(null);
 
@@ -47,47 +43,19 @@ const SearchBar = ({
   };
 
   const searchAlbums = async (query: string) => {
-    const result = await fetch(
-      `https://api.spotify.com/v1/search?q=${query}&type=album&limit=5`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")!}`,
-        },
-      }
-    ).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        handleError();
-      }
-    });
-    const items = result.albums?.items;
+    const items = await fetch(
+      `http://localhost:3000/api/spotify/search-albums?query=${query}`
+    ).then((response) => response.json());
+    console.log(items);
     setCurrentResults(items);
     setdisplayResults(true);
   };
 
-  const handleError = async () => {
-    const res = await refreshAccessToken();
-    localStorage.setItem("accessToken", res.access_token);
-  };
-
   const loadAlbum = async (id: string) => {
     const queriedAlbumId = await fetch(
-      `https://api.spotify.com/v1/albums/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")!}`,
-        },
-      }
-    ).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        handleError();
-        loadAlbum(id);
-      }
-    });
-
+      `http://localhost:3000/api/spotify/get-album?id=${id}`
+    ).then((response) => response.json());
+    console.log(queriedAlbumId);
     setCurrentAlbum(queriedAlbumId);
     setCurrentAlbumId(id);
   };
