@@ -6,6 +6,7 @@ import Image from "next/image";
 import StarRating from "@/app/components/StarRating";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { Album } from "@/types";
 interface review {
   rating: number;
   text: string;
@@ -17,7 +18,7 @@ interface review {
 }
 
 const CreateReview: React.FC = () => {
-  const [currentAlbum, setCurrentAlbum] = useState<any>(null);
+  const [currentAlbum, setCurrentAlbum] = useState<Album | null>(null);
   const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
@@ -30,6 +31,7 @@ const CreateReview: React.FC = () => {
     if (!session || !session.user) {
       redirect("api/auth/signin");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reviewInput = useRef<HTMLTextAreaElement>(null);
@@ -39,9 +41,9 @@ const CreateReview: React.FC = () => {
       text: reviewInput.current?.value!,
       rating: rating,
       albumId: currentAlbumId,
-      albumName: currentAlbum.name,
-      albumArtist: currentAlbum.artist,
-      albumImageId: currentAlbum?.image[2]["#text"],
+      albumName: currentAlbum!.name,
+      albumArtist: currentAlbum!.artists[0].name,
+      albumImageId: currentAlbum!.images[0].url,
       userId: session?.user?.id,
     };
     const response = await fetch(`/api/create-review`, {
@@ -97,12 +99,12 @@ const CreateReview: React.FC = () => {
                     {currentAlbum?.name}
                   </h1>
                   <h2 className=" mb-4 text-2xl font-bold text-gray-300">
-                    {currentAlbum?.artist}
+                    {currentAlbum?.artists[0].name}
                   </h2>
                 </div>
                 {currentAlbum && (
                   <Image
-                    src={`${currentAlbum?.image[2]["#text"]}`}
+                    src={`${currentAlbum?.images[0].url}`}
                     alt="album picture"
                     width={200}
                     height={200}

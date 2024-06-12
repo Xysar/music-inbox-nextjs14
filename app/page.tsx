@@ -27,6 +27,9 @@ export default async function Home({ searchParams }: { searchParams: any }) {
   const trendingAlbums = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
+    if (!trendingAlbums[i]) {
+      break;
+    }
     const aggregation = await prisma.review.aggregate({
       _avg: {
         rating: true,

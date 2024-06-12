@@ -1,5 +1,6 @@
 import React from "react";
-import { getAlbum } from "../../../lib/services/albums";
+import { getAlbumData } from "../../../lib/services/albums";
+import { getAlbum } from "@/lib/spotify";
 import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
 import Link from "next/link";
@@ -7,11 +8,13 @@ import { Album, Track } from "@/types";
 import { convertMillisToSeconds } from "@/lib/utils";
 
 const AlbumPage = async ({ params }: { params: { id: string } }) => {
-  const albumData: Album = await getAlbum(params.id);
+  const albumData = await getAlbumData(params.id);
+  let albumReviews = albumData.reviews;
+  const albumInfo: Album = await getAlbum(params.id);
 
   const returnTracklist = () => {
-    if (albumData?.tracks) {
-      return albumData.tracks.items.map((curTrack: Track, index: number) => {
+    if (albumInfo?.tracks) {
+      return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
         return (
           <div
             key={index}
@@ -32,15 +35,15 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
     <section className="relative bg-slate-900 px-2">
       <div className="z-[5] my-10 w-full rounded-lg bg-slate-800 p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
         <div className="flex justify-between ">
-          <h1 className="text-3xl">{albumData?.name}</h1>
-          <h2 className="text-2xl">{albumData?.artists[0].name}</h2>
+          <h1 className="text-3xl">{albumInfo?.name}</h1>
+          <h2 className="text-2xl">{albumInfo?.artists[0].name}</h2>
         </div>
 
-        {albumData && (
+        {albumInfo && (
           <div className="mt-10 flex flex-col gap-6 text-lg sm:flex-row">
             <div className="flex-shrink-0 mx-auto">
               <Image
-                src={`${albumData?.images[0].url}`}
+                src={`${albumInfo?.images[0].url}`}
                 alt="album picture"
                 width={300}
                 height={300}

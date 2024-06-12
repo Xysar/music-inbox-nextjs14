@@ -1,6 +1,6 @@
 import prisma from "../prisma";
 
-export const getAlbum = async (mbid: string) => {
+export const getAlbumData = async (mbid: string) => {
   const albumInfo = await prisma.album.findUnique({
     where: {
       id: mbid!,
