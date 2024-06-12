@@ -34,7 +34,8 @@ const AlbumCard = ({
 
   const convertMillisToSeconds = (milliseconds: number) => {
     const date = new Date(milliseconds);
-    return `${date.getMinutes()}:${date.getSeconds()}`;
+    let seconds: string = `${date.getSeconds()}`.padStart(2, "0");
+    return `${date.getMinutes()}:${seconds}`;
   };
 
   return (

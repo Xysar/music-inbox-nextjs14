@@ -12,13 +12,14 @@ const MainSearch = ({
   initialAlbum: Album;
   initialAlbumId: string;
 }) => {
-  const [currentAlbum, setCurrentAlbum] = useState<any>(null);
-  const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
+  const [currentAlbum, setCurrentAlbum] = useState<any>(initialAlbum);
+  const [currentAlbumId, setCurrentAlbumId] = useState<string>(initialAlbumId);
 
   return (
     <div className="px-5">
       <SearchBar
         setCurrentAlbum={setCurrentAlbum}
+        currentAlbumId={currentAlbumId}
         setCurrentAlbumId={setCurrentAlbumId}
       />
       <AlbumCard

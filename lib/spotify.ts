@@ -21,7 +21,6 @@ export async function getAccessToken() {
     });
 
     const data = await response.json();
-    console.log(data);
     if (response.ok) {
       accessToken = data.access_token;
       tokenExpiryTime = Date.now() + data.expires_in * 1000; // Convert expiry time to milliseconds
@@ -37,7 +36,7 @@ export const getAlbum = async (id: string) => {
   const token = await getAccessToken().catch((error) => {
     return error;
   });
-  console.log(token);
+
   const response = await fetch(`https://api.spotify.com/v1/albums/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -65,5 +64,6 @@ export const searchAlbums = async (query: string) => {
     .then((response) => response.json())
     .catch((err) => console.log(err));
   const items = result.albums?.items;
+
   return items;
 };

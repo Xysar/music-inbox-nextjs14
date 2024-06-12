@@ -4,7 +4,12 @@ import { Album } from "@/types";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
-const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
+const SearchBar = ({
+  setCurrentAlbum,
+  currentAlbumId,
+  setCurrentAlbumId,
+}: any) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const albumInput = useRef<HTMLInputElement>(null);
   const searchBar = useRef<HTMLDivElement>(null);
 
@@ -13,21 +18,17 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
 
   useEffect(() => {
     document.addEventListener("click", (e) => {
-      checkClick(e);
+      checkClickingSearchbar(e);
     });
 
     return () => {
       document.removeEventListener("click", (e) => {
-        checkClick(e);
+        checkClickingSearchbar(e);
       });
     };
   }, []);
 
-  useEffect(() => {
-    loadAlbum("4aawyAB9vmqN3uQ7FjRGTy");
-  }, []);
-
-  const checkClick = (e: any) => {
+  const checkClickingSearchbar = (e: any) => {
     if (searchBar.current && !searchBar.current.contains(e.target)) {
       setdisplayResults(false);
     } else if (albumInput.current) {
@@ -42,22 +43,22 @@ const SearchBar = ({ setCurrentAlbum, setCurrentAlbumId }: any) => {
     }
   };
 
-  const searchAlbums = async (query: string) => {
-    const items = await fetch(
-      `http://localhost:3000/api/spotify/search-albums?query=${query}`
-    ).then((response) => response.json());
-    console.log(items);
-    setCurrentResults(items);
-    setdisplayResults(true);
-  };
-
   const loadAlbum = async (id: string) => {
     const queriedAlbumId = await fetch(
-      `http://localhost:3000/api/spotify/get-album?id=${id}`
+      `${baseUrl}/api/spotify/get-album?id=${id}`
     ).then((response) => response.json());
     console.log(queriedAlbumId);
     setCurrentAlbum(queriedAlbumId);
     setCurrentAlbumId(id);
+  };
+
+  const searchAlbums = async (query: string) => {
+    const items = await fetch(
+      `${baseUrl}/api/spotify/search-albums?query=${query}`
+    ).then((response) => response.json());
+    console.log(items);
+    setCurrentResults(items);
+    setdisplayResults(true);
   };
 
   const handleAlbumClick = (result: Album) => {
