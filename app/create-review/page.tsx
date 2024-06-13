@@ -141,6 +141,11 @@ const CreateReview: React.FC = () => {
               {" "}
               Submit
             </button>
+            {error && (
+              <p className="text-white text-center p-2  text-xl">
+                Please fill out all fields
+              </p>
+            )}
           </form>
         </div>
       </div>

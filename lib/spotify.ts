@@ -49,6 +49,22 @@ export const getAlbum = async (id: string) => {
   return response;
 };
 
+export const getTrackInfo = async (id: string) => {
+  const token = await getAccessToken().catch((error) => {
+    return error;
+  });
+  const response = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.log(error);
+    });
+  return response;
+};
+
 export const searchAlbums = async (query: string) => {
   const token = await getAccessToken().catch((error) => {
     return error;

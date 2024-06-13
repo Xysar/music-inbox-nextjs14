@@ -9,14 +9,15 @@ import { convertMillisToSeconds } from "@/lib/utils";
 
 const AlbumPage = async ({ params }: { params: { id: string } }) => {
   const albumData = await getAlbumData(params.id);
-  let albumReviews = albumData.reviews;
+  let albumReviews = albumData?.reviews;
   const albumInfo: Album = await getAlbum(params.id);
 
   const returnTracklist = () => {
     if (albumInfo?.tracks) {
       return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
         return (
-          <div
+          <Link
+            href={`/track/${curTrack.id}`}
             key={index}
             className="flex w-full justify-between border-gray-600 bg-black p-2 hover:bg-slate-900 "
           >
@@ -25,7 +26,7 @@ const AlbumPage = async ({ params }: { params: { id: string } }) => {
               <p>{curTrack.name}</p>
             </div>
             <p className="">{convertMillisToSeconds(curTrack.duration_ms)}</p>
-          </div>
+          </Link>
         );
       });
     } else return <div>No Tracklist Info Found</div>;
