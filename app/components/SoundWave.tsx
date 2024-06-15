@@ -7,7 +7,7 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
   const mousePosition = useMousePosition(true);
   const cursor = useRef(null);
   const box = useRef(null);
-  const [percentage, setPercentage] = useState(null);
+  const [boxDimensions, setBoxDimensions] = useState(null);
   const [timeSelect, setTimeSelect] = useState(null);
   const [soundArray, setSoundArray] = useState(
     new Array(soundDivisions)
@@ -26,13 +26,11 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
   if (inBound) {
     sector = (mousePosition.x - rect?.left) / (rect?.width / 25);
     console.log(sector);
-    console.log(percentage);
   }
 
   useEffect(() => {
     const handleResize = () => {
-      setTimeSelect((rect?.width * percentage) / 100);
-      console.log(timeSelect);
+      setBoxDimensions((rect?.width * percentage) / 100);
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -46,13 +44,13 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
   };
 
   return (
-    <div className="m-auto flex items-center justify-center ">
-      <p className="b">0:00</p>
-      <div className="p-5  max-w-[700px]  relative">
+    <div className="m-auto p-4 flex items-center justify-center">
+      <p className=" ">0:00</p>
+      <div className="p-2 flex-1 max-w-[650px] relative">
         <div
           ref={box}
           onClick={() => handleTimeSelectClick()}
-          className=" h-32 flex gap-2 bg-slate-700 items-center z-10 relative justify-between"
+          className=" h-32 flex  gap-1 bg-slate-700 items-center z-10 relative  justify-between "
         >
           {soundArray.map((single, index) => {
             return (
@@ -67,7 +65,7 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
                       : "gray"
                   }`,
                 }}
-                className={`w-[1vw] rounded-full bg-clip-content bg-slate-400 `}
+                className={`w-1 max-w-2 flex-1 rounded-full bg-clip-content bg-slate-400 `}
               ></div>
             );
           })}
