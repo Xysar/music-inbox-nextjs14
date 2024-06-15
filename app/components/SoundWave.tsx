@@ -14,8 +14,11 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
       .fill(1)
       .map((prev) => Math.floor(Math.random() * (110 - 20) + 20))
   );
-  const rect = box.current?.getBoundingClientRect();
-
+  let rect = box.current?.getBoundingClientRect();
+  const handleResize = () => {
+    rect = box.current?.getBoundingClientRect();
+    console.log(rect);
+  };
   let sector = 0;
   let inBound =
     cursor.current &&
@@ -25,13 +28,9 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
     mousePosition.y > rect?.top;
   if (inBound) {
     sector = (mousePosition.x - rect?.left) / (rect?.width / 25);
-    console.log(sector);
   }
 
   useEffect(() => {
-    const handleResize = () => {
-      setBoxDimensions((rect?.width * percentage) / 100);
-    };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -40,7 +39,6 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
 
   const handleTimeSelectClick = () => {
     setTimeSelect(mousePosition.x - rect.left);
-    setPercentage(((mousePosition.x - rect.left) / rect.width) * 100);
   };
 
   return (
