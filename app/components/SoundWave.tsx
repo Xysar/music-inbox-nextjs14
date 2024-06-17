@@ -7,17 +7,15 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
   const mousePosition = useMousePosition(true);
   const cursor = useRef(null);
   const box = useRef(null);
-  const [boxDimensions, setBoxDimensions] = useState(null);
+  const [rect, setRect] = useState(null);
   const [timeSelect, setTimeSelect] = useState(null);
   const [soundArray, setSoundArray] = useState(
     new Array(soundDivisions)
       .fill(1)
       .map((prev) => Math.floor(Math.random() * (110 - 20) + 20))
   );
-  let rect = box.current?.getBoundingClientRect();
   const handleResize = () => {
-    rect = box.current?.getBoundingClientRect();
-    console.log(rect);
+    setRect(box.current?.getBoundingClientRect());
   };
   let sector = 0;
   let inBound =
@@ -31,6 +29,7 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
   }
 
   useEffect(() => {
+    setRect(box.current?.getBoundingClientRect());
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -38,7 +37,7 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
   }, []);
 
   const handleTimeSelectClick = () => {
-    setTimeSelect(mousePosition.x - rect.left);
+    setTimeSelect((mousePosition.x - rect.left) / rect.width);
   };
 
   return (
@@ -57,7 +56,9 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
                 style={{
                   height: `calc(${single}px)`,
                   backgroundColor: `${
-                    (!inBound && index < timeSelect / (rect?.width / 25)) ||
+                    (!inBound &&
+                      index <
+                        (timeSelect * rect?.width) / (rect?.width / 25)) ||
                     index < sector
                       ? "white"
                       : "gray"
@@ -73,7 +74,9 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
           <div
             ref={cursor}
             style={{
-              left: inBound ? mousePosition.x - rect?.left : timeSelect + "px",
+              left: inBound
+                ? mousePosition.x - rect?.left
+                : timeSelect * rect?.width + "px",
             }}
             className="absolute "
           >
@@ -97,7 +100,8 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
                   inBound
                     ? (mousePosition.x - rect?.left) /
                         (rect.width / trackInfo.duration_ms)
-                    : timeSelect / (rect?.width / trackInfo.duration_ms)
+                    : (timeSelect * rect?.width) /
+                        (rect?.width / trackInfo.duration_ms)
                 )}
               </p>
             </div>
