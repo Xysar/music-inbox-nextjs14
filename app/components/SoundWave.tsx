@@ -30,6 +30,7 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
 
   useEffect(() => {
     setRect(box.current?.getBoundingClientRect());
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -80,12 +81,13 @@ const SoundWave = ({ trackInfo }: { trackInfo: any }) => {
             }}
             className="absolute "
           >
-            <div
-              style={{
-                backgroundColor: inBound ? "rgb(100 116 139)" : "white",
-              }}
-              className="bg-slate-500 w-8 h-8 rounded-full right-[16px] relative "
-            >
+            <div className="bg-slate-500 w-8 h-8 rounded-full right-[16px] relative ">
+              <div
+                style={{
+                  backgroundColor: inBound ? "rgb(100 116 139)" : "white",
+                }}
+                className="bg-slate-500 w-6 h-6 rounded-full left-0 right-0 m-auto top-1 z-10 duration-300 ease-in-out relative "
+              ></div>
               <div
                 style={{
                   borderLeft: "16px solid transparent",
