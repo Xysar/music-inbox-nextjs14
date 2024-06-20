@@ -9,18 +9,18 @@ export async function POST(request: NextRequest) {
     update: {
       id: review.albumId,
       name: review.albumName,
-      artist: review.albumArtist,
+      artists: review.albumArtist,
       imageId: review.albumImageId,
     },
     create: {
       id: review.albumId,
-      artist: review.albumArtist,
+      artists: review.albumArtist,
       name: review.albumName,
       imageId: review.albumImageId,
     },
   });
 
-  const createdReview = await prisma.review.create({
+  const createdReview = await prisma.albumReview.create({
     data: {
       rating: review.rating,
       text: review.text,

@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 export async function DELETE(request: NextRequest) {
   const { reviewId } = await request.json();
   console.log(reviewId);
-  const deletedReview = await prisma.review.delete({
+  const deletedReview = await prisma.albumReview.delete({
     where: {
       id: reviewId,
     },

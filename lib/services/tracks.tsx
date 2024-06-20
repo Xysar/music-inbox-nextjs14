@@ -1,14 +1,14 @@
 import prisma from "../prisma";
 
-export const getAlbumData = async (mbid: string) => {
-  const albumInfo = await prisma.album.findUnique({
+export const getTrackData = async (id: string) => {
+  const trackData = await prisma.track.findUnique({
     where: {
-      id: mbid!,
+      id: id!,
     },
     include: {
-      albumReviews: {
+      trackReviews: {
         select: {
-          rating: true,
+          timeStamp: true,
           text: true,
           user: {
             select: {
@@ -21,5 +21,5 @@ export const getAlbumData = async (mbid: string) => {
       },
     },
   });
-  return albumInfo;
+  return trackData;
 };

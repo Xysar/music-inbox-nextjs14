@@ -35,25 +35,27 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
-    reviews       Review[]
+    albumReviews  AlbumReview[]
     sessions      Session[]
+    trackReviews  TrackReview[]
 }
 
 model Album {
-    id      String   @id
-    artist  String?
-    name    String
-    imageId String?
-    reviews Review[]
+    id           String        @id
+    artists      String[]
+    name         String
+    imageId      String?
+    albumReviews AlbumReview[]
+    tracks       Track[]
 }
 
-model Review {
+model AlbumReview {
     id      Int    @id @default(autoincrement())
     rating  Int
     text    String
@@ -61,6 +63,25 @@ model Review {
     userId  String
     album   Album  @relation(fields: [albumId], references: [id])
     user    User   @relation(fields: [userId], references: [id])
+}
+
+model Track {
+    id           String        @id
+    artists      String[]
+    name         String
+    albumId      String
+    trackReviews TrackReview[]
+    album        Album         @relation(fields: [albumId], references: [id])
+}
+
+model TrackReview {
+    id        Int    @id @default(autoincrement())
+    timeStamp Int
+    text      String
+    trackId   String
+    userId    String
+    user      User   @relation(fields: [userId], references: [id])
+    track     Track  @relation(fields: [trackId], references: [id])
 }
 
 model VerificationToken {

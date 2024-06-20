@@ -13,7 +13,7 @@ const getTrendingAlbums = async () => {
   const trendingAlbums = await prisma.album.findMany({
     take: 5,
     orderBy: {
-      reviews: {
+      albumReviews: {
         _count: "desc",
       },
     },
@@ -22,15 +22,16 @@ const getTrendingAlbums = async () => {
   return trendingAlbums;
 };
 
-export default async function Home({ searchParams }: { searchParams: any }) {
-  const initialAlbum = await getAlbum("4aawyAB9vmqN3uQ7FjRGTy");
+export default async function Home() {
+  const initialAlbumId = "0bUTHlWbkSQysoM3VsWldT";
+  const initialAlbum = await getAlbum(initialAlbumId);
   const trendingAlbums = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
     if (!trendingAlbums[i]) {
       break;
     }
-    const aggregation = await prisma.review.aggregate({
+    const aggregation = await prisma.albumReview.aggregate({
       _avg: {
         rating: true,
       },
@@ -97,10 +98,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
   return (
     <div className=" ">
       <Introduction />
-      <MainSearch
-        initialAlbum={initialAlbum}
-        initialAlbumId={"4aawyAB9vmqN3uQ7FjRGTy"}
-      />
+      <MainSearch initialAlbum={initialAlbum} initialAlbumId={initialAlbumId} />
       <TopAlbums trendingAlbums={trendingAlbums} />
     </div>
   );
