@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "./StarRating";
 import StaticStarRating from "./StaticStarRating";
-import { Review } from "@prisma/client";
+import { AlbumReview } from "@prisma/client";
 
 const UserReviews = ({
   userInfo,
@@ -28,16 +28,16 @@ const UserReviews = ({
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
   const [reviewToEdit, setReviewToEdit] = useState(-1);
-  const handleDelete = async (reviewToDelete: Review, index: number) => {
+  const handleDelete = async (reviewToDelete: AlbumReview, index: number) => {
     setUserReviews(
       userReviews.filter(
-        (singleReview: Review) => singleReview.id !== reviewToDelete.id
+        (singleReview: AlbumReview) => singleReview.id !== reviewToDelete.id
       )
     );
     await deleteReview(reviewToDelete);
   };
 
-  const deleteReview = async (review: Review) => {
+  const deleteReview = async (review: AlbumReview) => {
     const reviewId = review.id;
     const response = await fetch(`/api/delete-review`, {
       method: "DELETE",
@@ -81,7 +81,7 @@ const UserReviews = ({
     setReviewId(-1);
   }
 
-  function handleEditOpen(review: Review, index: number): void {
+  function handleEditOpen(review: AlbumReview, index: number): void {
     setReviewToEdit(index);
     setTextValue(review.text);
     setRating(review.rating);
