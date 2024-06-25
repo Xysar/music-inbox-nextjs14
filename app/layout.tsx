@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+
 import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
-
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/options";
-
 import Navbar from "./components/Navbar";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Music Inbox",

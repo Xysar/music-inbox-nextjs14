@@ -42,59 +42,6 @@ export default async function Home() {
     trendingAlbums[i].avgRating = aggregation["_avg"].rating;
   }
 
-  function generateRandomString(length: number) {
-    let result = "";
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-  }
-  const handleLoginSpotify = () => {
-    var scope = "user-read-private user-read-email";
-    var redirect_uri = "http://localhost:3000/callback";
-    var state = generateRandomString(16);
-
-    const params = {
-      response_type: "code",
-      client_id: process.env.SPOTIFY_CLIENTID!,
-      scope: scope,
-      state: state,
-    };
-
-    const baseUrl = new URL(
-      "https://accounts.spotify.com/authorize?" +
-        queryString.stringify(params) +
-        `&redirect_uri=${redirect_uri}`
-    );
-    return baseUrl.toString();
-  };
-
-  // const refreshAccessToken = async () => {
-  //   "use server";
-  //   const refreshToken = cookies().get("refresh_token");
-
-  //   const res = fetch("https://accounts.spotify.com/api/token", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       Authorization: `Basic ${base64.encode(
-  //         `${process.env.SPOTIFY_CLIENTID}:${process.env.SPOTIFY_SECRET}`
-  //       )}`,
-  //     },
-  //     body: queryString.stringify({
-  //       grant_type: "refresh_token",
-  //       refresh_token: refreshToken!.value,
-  //     }),
-  //   }).then((response) => response.json());
-
-  //   return res;
-  // };
-
   return (
     <div className=" ">
       <Introduction />

@@ -6,7 +6,7 @@ export const getUser = async (id: string) => {
       id: id!,
     },
     include: {
-      reviews: {
+      albumReviews: {
         select: {
           id: true,
           rating: true,

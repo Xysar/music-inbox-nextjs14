@@ -7,17 +7,16 @@ import authOptions from "@/lib/options";
 import UserReviews from "@/app/components/UserReviews";
 import { getUser } from "@/lib/services/users";
 import { Album } from "@/types";
-import { Review } from "@prisma/client";
 
 const getUserInfo = async (userId: string) => {
   const userInfo = await getUser(userId);
+
   return userInfo;
 };
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
   const session = await getServerSession(authOptions);
   const userOwnsAccount = session?.user.id == params.id;
-
   const userInfo = await getUserInfo(params.id);
 
   return (
@@ -29,8 +28,8 @@ const UserPage = async ({ params }: { params: { id: string } }) => {
               <Image
                 src={`${userInfo?.image}`}
                 alt=""
-                width={200}
-                height={200}
+                width={300}
+                height={300}
                 className="h-[200px] w-[200px]  rounded-full object-cover"
               />
             )}

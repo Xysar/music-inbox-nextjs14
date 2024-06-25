@@ -6,6 +6,9 @@ import { Track } from "@prisma/client";
 import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
 import SoundWave from "@/app/components/SoundWave";
+import SpotifyPlayer from "@/app/components/SpotifyPlayer";
+import SpotifyScript from "@/app/components/scripts/SpotifyScript";
+import { useSession } from "next-auth/react";
 const ClientPage = ({
   albumInfo,
   albumData,
@@ -16,6 +19,7 @@ const ClientPage = ({
   soundArray: any;
 }) => {
   const [trackMode, setTrackMode] = useState(0);
+  const { data: session } = useSession();
   function handleTrackClick(trackNumber: number): void {
     setTrackMode(trackNumber);
   }
@@ -31,10 +35,10 @@ const ClientPage = ({
       return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
         return (
           <button
-            onClick={() => handleTrackClick(index + 1)}
+            onClick={() => handleTrackClick(index)}
             key={index}
-            className={`flex w-full justify-between border-gray-600 bg-black p-2 hover:bg-slate-900 ${
-              trackMode === index + 1
+            className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
+              trackMode === index
                 ? " border-2 border-white"
                 : " border-2 border-black"
             } `}
@@ -52,48 +56,43 @@ const ClientPage = ({
   return (
     <div>
       <div className="z-[5] my-10 w-full rounded-lg bg-slate-800 p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
-        <div className="flex justify-between ">
-          <h1 className="text-3xl">{albumInfo?.name}</h1>
-          <h2 className="text-2xl">{albumInfo?.artists[0].name}</h2>
-        </div>
-
-        {albumInfo && (
-          <div className="mt-10 flex flex-col gap-6 text-lg sm:flex-row">
-            <div className="flex-shrink-0 mx-auto">
-              <Image
-                src={`${albumInfo?.images[0].url}`}
-                alt="album picture"
-                width={300}
-                height={300}
-                className="aspect-square w-[300px] "
-              />
+        <div className="grid grid-cols-5 gap-4 ">
+          <div className="col-span-2">
+            <div className="flex justify-between">
+              <h1 className="text-3xl">{albumInfo?.name}</h1>
+              <h2 className="text-2xl">{albumInfo?.artists[0].name}</h2>
             </div>
-            <div className=" flex flex-col justify-between">
-              <div className="relative mb-3 box-border w-full   border-gray-600 bg-black  ">
-                <button
-                  onClick={() => handleTrackClick(0)}
-                  className={`flex w-full justify-between border-gray-600 bg-black p-2 hover:bg-slate-900 ${
-                    trackMode === 0
-                      ? " border-2 border-white"
-                      : " border-2 border-black"
-                  } `}
-                >
-                  <div className="flex gap-2">
-                    <p>Whole Album</p>
-                  </div>
-                </button>
-                {returnTracklist()}
-              </div>
-            </div>
+            <Image
+              src={`${albumInfo?.images[0].url}`}
+              alt="album picture"
+              width={300}
+              height={300}
+              className="aspect-square w-[300px] h-[300px] "
+            />
+            <Link
+              href={`/create-review`}
+              className="bg-orange-600 inline-block mt-4 rounded-lg hover:bg-slate-600 p-2 duration-150 ease-in-out"
+            >
+              Create Review
+            </Link>
           </div>
-        )}
-        {trackMode !== 0 && (
-          <SoundWave
-            trackInfo={albumInfo?.tracks.items[trackMode - 1]}
-            interactive={false}
-            soundArray={soundArray}
-          />
-        )}
+          <div className=" col-span-3  ">
+            {albumInfo && (
+              <div className="    gap-6 text-lg sm:flex-row">
+                <div className=" flex flex-col justify-between">
+                  <div className="relative mb-3 box-border w-full   border-gray-600 bg-black  ">
+                    {returnTracklist()}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <SoundWave
+          trackInfo={albumInfo?.tracks.items[trackMode]}
+          interactive={false}
+          soundArray={soundArray}
+        />
       </div>
 
       <div className="">
@@ -137,6 +136,7 @@ const ClientPage = ({
           </div>
         ))}
       </div>
+      <SpotifyPlayer accessToken={session?.user.token} />
     </div>
   );
 };
