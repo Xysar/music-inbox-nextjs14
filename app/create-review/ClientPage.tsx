@@ -6,7 +6,8 @@ import Image from "next/image";
 import StarRating from "@/app/components/StarRating";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Album } from "@/types";
+import { Album, Track } from "@/types";
+import { convertMillisToSeconds } from "@/lib/utils";
 interface review {
   rating: number;
   text: string;
@@ -17,9 +18,18 @@ interface review {
   albumImageId: string;
 }
 
-const ClientPage: React.FC = () => {
-  const [currentAlbum, setCurrentAlbum] = useState<Album | null>(null);
-  const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
+const ClientPage = ({
+  trackId,
+  albumId,
+  albumInfo,
+}: {
+  trackId: string;
+  albumId: string;
+  albumInfo: Album;
+}) => {
+  const [currentAlbum, setCurrentAlbum] = useState<Album | null>(albumInfo);
+  const [currentAlbumId, setCurrentAlbumId] = useState<string>(albumId);
+  const [trackMode, setTrackMode] = useState(trackId);
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -76,6 +86,30 @@ const ClientPage: React.FC = () => {
 
     await createReview();
     router.push(`/user/${session?.user?.id}`);
+  };
+
+  const returnTracklist = () => {
+    if (albumInfo?.tracks) {
+      return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
+        return (
+          <button
+            onClick={() => setTrackMode(index)}
+            key={index}
+            className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
+              trackMode === index
+                ? " border-2 border-white"
+                : " border-2 border-black"
+            } `}
+          >
+            <div className="flex gap-2">
+              <p>{index + 1}.</p>
+              <p>{curTrack.name}</p>
+            </div>
+            <p className="">{convertMillisToSeconds(curTrack.duration_ms)}</p>
+          </button>
+        );
+      });
+    } else return <div>No Tracklist Info Found</div>;
   };
 
   return (
