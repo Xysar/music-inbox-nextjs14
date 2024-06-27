@@ -71,10 +71,7 @@ const ClientPage = ({
             />
             <Link
               href={`/create-review${
-                "?albumId=" +
-                albumInfo.id +
-                "&trackId=" +
-                albumInfo.tracks.items[trackMode].id
+                "?albumId=" + albumInfo.id + "&trackId=" + trackMode
               }`}
               className="bg-orange-600 inline-block mt-4 rounded-lg hover:bg-slate-600 p-2 duration-150 ease-in-out"
             >

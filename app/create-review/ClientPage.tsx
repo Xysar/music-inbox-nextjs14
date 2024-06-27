@@ -8,28 +8,24 @@ import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Album, Track } from "@/types";
 import { convertMillisToSeconds } from "@/lib/utils";
-interface review {
-  rating: number;
-  text: string;
-  albumId: string;
-  albumArtist: string;
-  userId: string;
-  albumName: string;
-  albumImageId: string;
-}
+import { TrackReview } from "@prisma/client";
+import SoundWave from "../components/SoundWave";
 
 const ClientPage = ({
   trackId,
   albumId,
   albumInfo,
+  soundArray,
 }: {
-  trackId: string;
+  trackId: number;
   albumId: string;
   albumInfo: Album;
+  soundArray: number[];
 }) => {
   const [currentAlbum, setCurrentAlbum] = useState<Album | null>(albumInfo);
   const [currentAlbumId, setCurrentAlbumId] = useState<string>(albumId);
-  const [trackMode, setTrackMode] = useState(trackId);
+  const [reviewMode, setReviewMode] = useState<string>("track");
+  const [trackMode, setTrackMode] = useState<number>(trackId);
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -38,17 +34,21 @@ const ClientPage = ({
   const { data: session } = useSession();
 
   useEffect(() => {
+    setTrackMode(0);
+  }, [currentAlbum]);
+
+  useEffect(() => {
     if (!session || !session.user) {
       redirect("api/auth/signin");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const reviewInput = useRef<HTMLTextAreaElement>(null);
+  const reviewAlbumInput = useRef<HTMLTextAreaElement>(null);
 
   const createReview = async () => {
-    const newReview: review = {
-      text: reviewInput.current?.value!,
+    const newReview = {
+      text: reviewAlbumInput.current?.value!,
       rating: rating,
       albumId: currentAlbumId,
       albumName: currentAlbum!.name,
@@ -67,11 +67,32 @@ const ClientPage = ({
     });
   };
 
+  const createTrackReview = async () => {
+    const newReview: TrackReview = {
+      text: reviewAlbumInput.current?.value!,
+      rating: rating,
+      albumId: currentAlbumId,
+      albumName: currentAlbum!.name,
+      albumArtist: currentAlbum!.artists[0].name,
+      albumImageId: currentAlbum!.images[0].url,
+      userId: session?.user?.id,
+    };
+    const response = await fetch(`/api/track/create-review`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newReview,
+      }),
+    });
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    if (!reviewInput.current?.value) {
+    if (!reviewAlbumInput.current?.value) {
       setError(true);
       return;
     }
@@ -89,8 +110,8 @@ const ClientPage = ({
   };
 
   const returnTracklist = () => {
-    if (albumInfo?.tracks) {
-      return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
+    if (currentAlbum?.tracks) {
+      return currentAlbum.tracks.items.map((curTrack: Track, index: number) => {
         return (
           <button
             onClick={() => setTrackMode(index)}
@@ -122,65 +143,150 @@ const ClientPage = ({
             setLoading={setLoading}
           />
         </div>
-        <div className="flex flex-col items-center justify-evenly md:flex-row ">
-          <div className=" ">
-            {loading ? (
-              <div className="text-3xl text-white">Loading...</div>
-            ) : currentAlbum ? (
-              <div className=" bg-slate-900 text-slate-100">
-                <div className="max-w-[300px] px-4 pt-4">
-                  <h1 className=" mb-1 text-3xl font-bold text-white ">
-                    {currentAlbum?.name}
-                  </h1>
-                  <h2 className=" mb-4 text-2xl font-bold text-gray-300">
-                    {currentAlbum?.artists[0].name}
-                  </h2>
-                </div>
-                {currentAlbum && (
-                  <Image
-                    src={`${currentAlbum?.images[0].url}`}
-                    alt="album picture"
-                    width={200}
-                    height={200}
-                    className="h-[300px] w-[300px] "
-                  />
+        <div className="">
+          <div className=" m-auto  w-fit my-12">
+            <button
+              className={`text-white text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-l-full border border-white`}
+            >
+              Track
+            </button>
+            <button className="text-white text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-r-full border border-white">
+              Album
+            </button>
+          </div>
+          {reviewMode == "album" && (
+            <div className="flex flex-col items-center justify-evenly md:flex-row ">
+              <div className=" ">
+                {loading ? (
+                  <div className="text-3xl text-white">Loading...</div>
+                ) : currentAlbum ? (
+                  <div className=" bg-slate-900 text-slate-100">
+                    <div className="max-w-[300px] px-4 pt-4">
+                      <h1 className=" mb-1 text-3xl font-bold text-white ">
+                        {currentAlbum?.name}
+                      </h1>
+                      <h2 className=" mb-4 text-2xl font-bold text-gray-300">
+                        {currentAlbum?.artists[0].name}
+                      </h2>
+                    </div>
+                    {currentAlbum && (
+                      <Image
+                        src={``}
+                        alt="album picture"
+                        width={200}
+                        height={200}
+                        className="h-[300px] w-[300px] bg-white "
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-[300px] bg-slate-900 text-slate-100">
+                    <p className="p-6 text-3xl">
+                      Enter an album to be reviewed
+                    </p>
+                  </div>
                 )}
               </div>
-            ) : (
-              <div className="w-[300px] bg-slate-900 text-slate-100">
-                <p className="p-6 text-3xl">Enter an album to be reviewed</p>
+              <form className="max-w-[600px] flex-1 py-12 text-slate-100">
+                <div className=" mx-2 mb-5">
+                  <label className="text-2xl" htmlFor="review">
+                    Write Review Here:
+                  </label>
+                  <textarea
+                    required
+                    ref={reviewAlbumInput}
+                    className="h-32 w-full rounded-md bg-slate-400 p-3 text-lg text-black"
+                  ></textarea>
+                </div>
+                <div className="mb-10 flex justify-center">
+                  <StarRating rating={rating} setRating={setRating} />
+                </div>
+                <button
+                  className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
+                  type="submit"
+                  onClick={(e) => handleSubmit(e)}
+                >
+                  {" "}
+                  Submit
+                </button>
+                {error && (
+                  <p className="text-white text-center p-2  text-xl">
+                    Please fill out all fields
+                  </p>
+                )}
+              </form>
+            </div>
+          )}
+          {reviewMode == "track" && (
+            <div className="flex flex-col items-center justify-evenly  ">
+              <div className=" w-full">
+                {loading ? (
+                  <div className="text-3xl text-white">Loading...</div>
+                ) : currentAlbum ? (
+                  <div className="grid grid-cols-5 gap-4 w-full ">
+                    <div className="col-span-2 bg-slate-900 text-slate-100">
+                      <div className="max-w-[300px] px-4 pt-4">
+                        <h1 className=" mb-1 text-3xl font-bold text-white ">
+                          {currentAlbum?.name}
+                        </h1>
+                        <h2 className=" mb-4 text-2xl font-bold text-gray-300">
+                          {currentAlbum?.artists[0].name}
+                        </h2>
+                      </div>
+                      {currentAlbum && (
+                        <Image
+                          src={``}
+                          alt="album picture"
+                          width={200}
+                          height={200}
+                          className="h-[300px] w-[300px] bg-white "
+                        />
+                      )}
+                    </div>
+                    <div className="text-white col-span-3">
+                      {returnTracklist()}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-[300px] bg-slate-900 text-slate-100">
+                    <p className="p-6 text-3xl">
+                      Enter an album to be reviewed
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-
-          <form className="max-w-[600px] flex-1 py-12 text-slate-100">
-            <div className=" mx-2 mb-5">
-              <label className="text-2xl" htmlFor="review">
-                Write Review Here:
-              </label>
-              <textarea
-                required
-                ref={reviewInput}
-                className="h-32 w-full rounded-md bg-slate-400 p-3 text-lg text-black"
-              ></textarea>
+              <form className="max-w-[600px] flex-1 py-12 text-slate-100">
+                <div className=" mx-2 mb-5">
+                  <label className="text-2xl" htmlFor="review">
+                    Write Review Here:
+                  </label>
+                  <textarea
+                    required
+                    ref={reviewAlbumInput}
+                    className="h-32 w-full rounded-md bg-slate-400 p-3 text-lg text-black"
+                  ></textarea>
+                </div>
+                <SoundWave
+                  trackInfo={currentAlbum?.tracks.items[trackMode]}
+                  interactive={true}
+                  soundArray={soundArray}
+                />
+                <button
+                  className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
+                  type="submit"
+                  onClick={(e) => handleSubmit(e)}
+                >
+                  {" "}
+                  Submit
+                </button>
+                {error && (
+                  <p className="text-white text-center p-2  text-xl">
+                    Please fill out all fields
+                  </p>
+                )}
+              </form>
             </div>
-            <div className="mb-10 flex justify-center">
-              <StarRating rating={rating} setRating={setRating} />
-            </div>
-            <button
-              className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
-              type="submit"
-              onClick={(e) => handleSubmit(e)}
-            >
-              {" "}
-              Submit
-            </button>
-            {error && (
-              <p className="text-white text-center p-2  text-xl">
-                Please fill out all fields
-              </p>
-            )}
-          </form>
+          )}
         </div>
       </div>
     </section>

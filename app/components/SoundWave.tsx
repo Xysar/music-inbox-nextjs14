@@ -79,7 +79,7 @@ const SoundWave = ({
         </div>
 
         <div className="relative mt-5">
-          {interactive && (
+          {
             <div
               ref={cursor}
               style={{
@@ -87,7 +87,7 @@ const SoundWave = ({
                   ? mousePosition.x! - rect?.left
                   : timeSelect! * rect?.width + "px",
               }}
-              className="absolute "
+              className="absolute"
             >
               <div className="bg-slate-500 w-8 h-8 rounded-full right-[16px] relative ">
                 <div
@@ -116,7 +116,7 @@ const SoundWave = ({
                 </p>
               </div>
             </div>
-          )}
+          }
         </div>
       </div>
       <p className="">{convertMillisToSeconds(trackInfo.duration_ms)}</p>
