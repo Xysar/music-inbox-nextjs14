@@ -25,7 +25,8 @@ const ClientPage = ({
   const [currentAlbum, setCurrentAlbum] = useState<Album | null>(albumInfo);
   const [currentAlbumId, setCurrentAlbumId] = useState<string>(albumId);
   const [reviewMode, setReviewMode] = useState<string>("track");
-  const [trackMode, setTrackMode] = useState<number>(trackId);
+  const [currentTrack, setCurrentTrack] = useState<number>(trackId);
+  const [timeSelect, setTimeSelect] = useState<number>(0);
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -34,19 +35,21 @@ const ClientPage = ({
   const { data: session } = useSession();
 
   useEffect(() => {
-    setTrackMode(0);
+    setCurrentTrack(0);
   }, [currentAlbum]);
 
   useEffect(() => {
     if (!session || !session.user) {
       redirect("api/auth/signin");
     }
+    console.log(currentAlbum);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reviewAlbumInput = useRef<HTMLTextAreaElement>(null);
+  const reviewTrackInput = useRef<HTMLTextAreaElement>(null);
 
-  const createReview = async () => {
+  const createAlbumReview = async () => {
     const newReview = {
       text: reviewAlbumInput.current?.value!,
       rating: rating,
@@ -68,9 +71,11 @@ const ClientPage = ({
   };
 
   const createTrackReview = async () => {
+    console.log(timeSelect);
+    return;
     const newReview: TrackReview = {
-      text: reviewAlbumInput.current?.value!,
-      rating: rating,
+      text: reviewTrackInput.current?.value!,
+      timeStamp: 0,
       albumId: currentAlbumId,
       albumName: currentAlbum!.name,
       albumArtist: currentAlbum!.artists[0].name,
@@ -105,8 +110,14 @@ const ClientPage = ({
       return;
     }
 
-    await createReview();
+    await createAlbumReview();
     router.push(`/user/${session?.user?.id}`);
+  };
+  const handleTrackReviewSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    await createTrackReview();
   };
 
   const returnTracklist = () => {
@@ -114,10 +125,10 @@ const ClientPage = ({
       return currentAlbum.tracks.items.map((curTrack: Track, index: number) => {
         return (
           <button
-            onClick={() => setTrackMode(index)}
+            onClick={() => setCurrentTrack(index)}
             key={index}
             className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
-              trackMode === index
+              currentTrack === index
                 ? " border-2 border-white"
                 : " border-2 border-black"
             } `}
@@ -171,11 +182,11 @@ const ClientPage = ({
                     </div>
                     {currentAlbum && (
                       <Image
-                        src={``}
+                        src={`${currentAlbum?.images[0].url}`}
                         alt="album picture"
                         width={200}
                         height={200}
-                        className="h-[300px] w-[300px] bg-white "
+                        className="h-[300px] w-[300px]  "
                       />
                     )}
                   </div>
@@ -235,11 +246,11 @@ const ClientPage = ({
                       </div>
                       {currentAlbum && (
                         <Image
-                          src={``}
+                          src={`${currentAlbum?.images[0].url}`}
                           alt="album picture"
                           width={200}
                           height={200}
-                          className="h-[300px] w-[300px] bg-white "
+                          className="h-[300px] w-[300px]"
                         />
                       )}
                     </div>
@@ -255,36 +266,40 @@ const ClientPage = ({
                   </div>
                 )}
               </div>
-              <form className="max-w-[600px] flex-1 py-12 text-slate-100">
-                <div className=" mx-2 mb-5">
-                  <label className="text-2xl" htmlFor="review">
-                    Write Review Here:
-                  </label>
-                  <textarea
-                    required
-                    ref={reviewAlbumInput}
-                    className="h-32 w-full rounded-md bg-slate-400 p-3 text-lg text-black"
-                  ></textarea>
-                </div>
-                <SoundWave
-                  trackInfo={currentAlbum?.tracks.items[trackMode]}
-                  interactive={true}
-                  soundArray={soundArray}
-                />
-                <button
-                  className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
-                  type="submit"
-                  onClick={(e) => handleSubmit(e)}
-                >
-                  {" "}
-                  Submit
-                </button>
-                {error && (
-                  <p className="text-white text-center p-2  text-xl">
-                    Please fill out all fields
-                  </p>
-                )}
-              </form>
+              {currentAlbum && (
+                <form className="max-w-[600px] flex-1 py-12 text-slate-100">
+                  <div className=" mx-2 mb-5">
+                    <label className="text-2xl" htmlFor="review">
+                      Write Review Here:
+                    </label>
+                    <textarea
+                      required
+                      ref={reviewTrackInput}
+                      className="h-32 w-full rounded-md bg-slate-400 p-3 text-lg text-black"
+                    ></textarea>
+                  </div>
+                  <SoundWave
+                    trackInfo={currentAlbum?.tracks.items[currentTrack]}
+                    timeSelect={timeSelect}
+                    setTimeSelect={setTimeSelect}
+                    interactive={true}
+                    soundArray={soundArray}
+                  />
+                  <button
+                    className="m-auto block rounded-lg bg-orange-600 py-3 px-6 text-lg duration-300 ease-in-out box-border hover:bg-dark-navy border border-dark-navy hover:border-white"
+                    type="submit"
+                    onClick={(e) => handleTrackReviewSubmit(e)}
+                  >
+                    {" "}
+                    Submit
+                  </button>
+                  {error && (
+                    <p className="text-white text-center p-2  text-xl">
+                      Please fill out all fields
+                    </p>
+                  )}
+                </form>
+              )}
             </div>
           )}
         </div>

@@ -7,10 +7,14 @@ const CreateReview = async ({
   searchParams: { trackId: number; albumId: string };
 }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  let queriedAlbumId = null;
 
-  const queriedAlbumId = await fetch(
-    `${baseUrl}/api/spotify/get-album?id=${searchParams.albumId}`
-  ).then((response) => response.json());
+  if (searchParams.albumId) {
+    queriedAlbumId = await fetch(
+      `${baseUrl}/api/spotify/get-album?id=${searchParams.albumId}`
+    ).then((response) => response.json());
+  }
+
   const soundArray = new Array(25)
     .fill(1)
     .map(() => Math.floor(Math.random() * (110 - 20) + 20));

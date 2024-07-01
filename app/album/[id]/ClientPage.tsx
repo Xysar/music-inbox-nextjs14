@@ -19,6 +19,7 @@ const ClientPage = ({
   soundArray: any;
 }) => {
   const [trackMode, setTrackMode] = useState(0);
+  const [timeSelect, setTimeSelect] = useState<number>(0);
   const { data: session } = useSession();
   function handleTrackClick(trackNumber: number): void {
     setTrackMode(trackNumber);
@@ -92,6 +93,8 @@ const ClientPage = ({
         </div>
         <SoundWave
           trackInfo={albumInfo?.tracks.items[trackMode]}
+          timeSelect={timeSelect}
+          setTimeSelect={setTimeSelect}
           interactive={false}
           soundArray={soundArray}
         />

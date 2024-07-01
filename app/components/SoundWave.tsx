@@ -6,17 +6,20 @@ const SoundWave = ({
   trackInfo,
   interactive,
   soundArray,
+  timeSelect,
+  setTimeSelect,
 }: {
   trackInfo: any;
   interactive: boolean;
   soundArray: number[];
+  timeSelect: any;
+  setTimeSelect: any;
 }) => {
   const mousePosition = useMousePosition({ includeTouch: true });
   const cursor = useRef(null);
   const box = useRef<HTMLDivElement | null>(null);
   const [rect, setRect] = useState<any>(null);
-  const [timeSelect, setTimeSelect] = useState<number>(0);
-
+  console.log(mousePosition);
   const handleResize = () => {
     setRect(box.current?.getBoundingClientRect());
   };
@@ -26,8 +29,8 @@ const SoundWave = ({
     cursor.current &&
     mousePosition.x! > rect?.left &&
     mousePosition?.x! < rect?.right &&
-    mousePosition?.y! < rect?.bottom &&
-    mousePosition?.y! > rect?.top;
+    mousePosition?.y! < rect?.bottom - window.scrollY &&
+    mousePosition?.y! > rect?.top - window.scrollY;
   if (inBound) {
     sector = (mousePosition.x! - rect.left) / (rect?.width / 25);
   }
@@ -39,7 +42,7 @@ const SoundWave = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [trackInfo]);
 
   const handleTimeSelectClick = () => {
     if (interactive) {
@@ -77,7 +80,6 @@ const SoundWave = ({
             );
           })}
         </div>
-
         <div className="relative mt-5">
           {
             <div
