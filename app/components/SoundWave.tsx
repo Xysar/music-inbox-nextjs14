@@ -19,9 +19,15 @@ const SoundWave = ({
   const cursor = useRef(null);
   const box = useRef<HTMLDivElement | null>(null);
   const [rect, setRect] = useState<any>(null);
-  console.log(mousePosition);
+
   const handleResize = () => {
-    setRect(box.current?.getBoundingClientRect());
+    setRect({
+      width: box.current?.getBoundingClientRect().width,
+      left: box.current?.getBoundingClientRect().left,
+      right: box.current?.getBoundingClientRect().right,
+      top: box.current?.getBoundingClientRect().top! + window.scrollY,
+      bottom: box.current?.getBoundingClientRect().bottom! + window.scrollY,
+    });
   };
 
   let sector = 0;
@@ -36,7 +42,7 @@ const SoundWave = ({
   }
 
   useEffect(() => {
-    setRect(box.current!.getBoundingClientRect());
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => {

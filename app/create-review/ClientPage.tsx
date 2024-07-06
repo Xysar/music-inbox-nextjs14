@@ -32,11 +32,9 @@ const ClientPage = ({
   const [error, setError] = useState(false);
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const trackObject = currentAlbum?.tracks.items[currentTrack];
 
-  useEffect(() => {
-    setCurrentTrack(0);
-  }, [currentAlbum]);
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (!session || !session.user) {
@@ -71,6 +69,7 @@ const ClientPage = ({
   };
 
   const createTrackReview = async () => {
+    console.log(trackObject);
     console.log(timeSelect);
     return;
     const newReview: TrackReview = {
@@ -152,6 +151,7 @@ const ClientPage = ({
             setCurrentAlbum={setCurrentAlbum}
             setCurrentAlbumId={setCurrentAlbumId}
             setLoading={setLoading}
+            setCurrentTrack={setCurrentTrack}
           />
         </div>
         <div className="">

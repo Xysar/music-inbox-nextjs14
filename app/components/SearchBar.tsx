@@ -8,6 +8,7 @@ const SearchBar = ({
   setCurrentAlbum,
   currentAlbumId,
   setCurrentAlbumId,
+  setCurrentTrack,
 }: any) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const albumInput = useRef<HTMLInputElement>(null);
@@ -49,6 +50,9 @@ const SearchBar = ({
     ).then((response) => response.json());
     console.log(queriedAlbumId);
     setCurrentAlbum(queriedAlbumId);
+    if (setCurrentTrack) {
+      setCurrentTrack(0);
+    }
     setCurrentAlbumId(id);
   };
 
