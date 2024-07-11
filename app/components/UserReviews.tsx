@@ -23,14 +23,18 @@ const UserReviews = ({
   userInfo: any;
   userOwnsAccount: boolean;
 }) => {
-  const [userReviews, setUserReviews] = useState(userInfo.reviews);
+  useEffect(() => {
+    console.log(userInfo);
+  }, []);
+  const [trackReviews, setTrackReviews] = useState(userInfo.trackReviews);
   const [rating, setRating] = useState(0);
+  const [reviewMode, setReviewMode] = useState("track");
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
   const [reviewToEdit, setReviewToEdit] = useState(-1);
   const handleDelete = async (reviewToDelete: AlbumReview, index: number) => {
-    setUserReviews(
-      userReviews.filter(
+    setTrackReviews(
+      trackReviews.filter(
         (singleReview: AlbumReview) => singleReview.id !== reviewToDelete.id
       )
     );
@@ -68,13 +72,13 @@ const UserReviews = ({
 
     event.preventDefault();
 
-    const newUserReviews = userReviews.map((review: any, index: number) => {
+    const newUserReviews = trackReviews.map((review: any, index: number) => {
       if (index === reviewIndex) {
         return { ...review, rating: rating, text: textValue };
       } else return review;
     });
 
-    setUserReviews(newUserReviews);
+    setTrackReviews(newUserReviews);
     setReviewToEdit(-1);
     setTextValue("");
     setRating(-1);
@@ -96,30 +100,46 @@ const UserReviews = ({
 
   return (
     <section className="m-4">
-      {!userInfo.reviews && (
+      <div className="m-auto w-fit my-12">
+        <button
+          className={`${
+            reviewMode == "track" ? "bg-white text-dark-navy" : "text-white"
+          }text-white text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-l-full border border-white`}
+        >
+          Track
+        </button>
+        <button
+          className={`${
+            reviewMode == "album" ? "bg-white text-dark-navy" : "text-white"
+          } text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-r-full border border-white`}
+        >
+          Album
+        </button>
+      </div>
+      {!trackReviews && (
         <p className="text-center text-xl text-white ">No Reviews Made Yet</p>
       )}
-      {userReviews.map((review: any, index: number) => (
+      {trackReviews.map((review: any, index: number) => (
         <div
           key={review.id}
           className="mb-4 border-white border rounded-lg flex "
         >
           <Image
-            src={review.album.imageId}
+            src={review.track.album.imageId}
             width={200}
             className="h-[300px] w-[300px] p-2 rounded-xl "
             height={200}
             alt="Album Cover"
           />
-          <div className="w-full  p-5">
+          <div className="w-full p-5">
             <div className="flex justify-between mb-4 ">
               <div className="text-white  flex-1 w-[100px]  overflow-hidden">
                 <h1 className="text-3xl font-bold  ">
-                  {review.album.name.length > 250
-                    ? `${review.album.name.substring(0, 250)}...`
-                    : review.album.name}
+                  {review.track.album.name.length > 250
+                    ? `${review.track.album.name.substring(0, 250)}...`
+                    : review.track.album.name}
                 </h1>
-                <h2 className=" text-2xl ">{review.album.artist}</h2>
+                <h2 className=" text-2xl ">{review.track.album.artists[0]}</h2>
               </div>
               <div className=" ">
                 {userOwnsAccount && (

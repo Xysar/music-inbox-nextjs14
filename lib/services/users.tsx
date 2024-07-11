@@ -19,7 +19,11 @@ export const getUser = async (id: string) => {
           id: true,
           timeStamp: true,
           text: true,
-          track: true,
+          track: {
+            include: {
+              album: true,
+            },
+          },
         },
       },
     },

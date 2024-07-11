@@ -21,6 +21,8 @@ export async function POST(request: NextRequest) {
     update: {},
     create: {
       id: trackReviewInput.track.id,
+      duration: trackReviewInput.track.duration_ms,
+      artists: trackReviewInput.track.artists,
       albumId: trackReviewInput.albumId,
       name: trackReviewInput.track.name,
       trackNumber: trackReviewInput.track.number,

@@ -64,6 +64,8 @@ const ClientPage = ({
         id: trackObject!.id,
         number: currentTrack,
         name: trackObject!.name,
+        artists: trackObject?.artists.map((artist) => artist.name),
+        duration: trackObject?.duration_ms,
       },
       userId: session?.user?.id,
     };
@@ -77,7 +79,6 @@ const ClientPage = ({
       }),
     });
     const reviewResult = await response.json();
-    console.log(reviewResult);
   };
 
   const handleSubmit = async (
@@ -100,11 +101,17 @@ const ClientPage = ({
     await createAlbumReview();
     router.push(`/user/${session?.user?.id}`);
   };
+
   const handleTrackReviewSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    if (!reviewTrackInput.current?.value) {
+      setError(true);
+      return;
+    }
     await createTrackReview();
+    router.push(`/user/${session?.user?.id}`);
   };
 
   const returnTracklist = () => {
@@ -112,7 +119,10 @@ const ClientPage = ({
       return currentAlbum.tracks.items.map((curTrack: Track, index: number) => {
         return (
           <button
-            onClick={() => setCurrentTrack(index)}
+            onClick={() => {
+              setCurrentTrack(index);
+              reviewTrackInput.current!.value = "";
+            }}
             key={index}
             className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
               currentTrack === index
@@ -143,13 +153,19 @@ const ClientPage = ({
           />
         </div>
         <div className="">
-          <div className=" m-auto  w-fit my-12">
+          <div className="m-auto w-fit my-12">
             <button
-              className={`text-white text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-l-full border border-white`}
+              className={`${
+                reviewMode == "track" ? "bg-white text-dark-navy" : "text-white"
+              }text-white text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-l-full border border-white`}
             >
               Track
             </button>
-            <button className="text-white text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-r-full border border-white">
+            <button
+              className={`${
+                reviewMode == "album" ? "bg-white text-dark-navy" : "text-white"
+              } text-lg py-2 px-5 hover:bg-white hover:text-dark-navy duration-150 ease-in-out rounded-r-full border border-white`}
+            >
               Album
             </button>
           </div>

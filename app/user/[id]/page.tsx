@@ -6,7 +6,6 @@ import authOptions from "@/lib/options";
 
 import UserReviews from "@/app/components/UserReviews";
 import { getUser } from "@/lib/services/users";
-import { Album } from "@/types";
 
 const getUserInfo = async (userId: string) => {
   const userInfo = await getUser(userId);

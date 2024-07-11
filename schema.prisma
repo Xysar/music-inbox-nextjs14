@@ -71,6 +71,7 @@ model Track {
     artists      String[]
     name         String
     albumId      String
+    duration     Int           @default(0)
     trackReviews TrackReview[]
     album        Album         @relation(fields: [albumId], references: [id])
 }
