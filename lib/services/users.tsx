@@ -14,6 +14,14 @@ export const getUser = async (id: string) => {
           album: true,
         },
       },
+      trackReviews: {
+        select: {
+          id: true,
+          timeStamp: true,
+          text: true,
+          track: true,
+        },
+      },
     },
   });
   return userInfo;

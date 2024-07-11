@@ -56,8 +56,7 @@ model Album {
 }
 
 model AlbumReview {
-    id Int @id @default(autoincrement())
-
+    id      Int    @id @default(autoincrement())
     rating  Int
     text    String
     albumId String

@@ -24,7 +24,7 @@ const authOptions: AuthOptions = {
         where: { userId: user.id },
       });
       let responseTokens = null;
-      if (spotifyAccount.expires_at * 1000 < Date.now()) {
+      if (spotifyAccount.expires_at! * 1000 < Date.now()) {
         try {
           const response = await fetch(
             "https://accounts.spotify.com/api/token",
@@ -38,7 +38,7 @@ const authOptions: AuthOptions = {
               },
               body: new URLSearchParams({
                 grant_type: "refresh_token",
-                refresh_token: spotifyAccount.refresh_token,
+                refresh_token: spotifyAccount.refresh_token!,
               }),
             }
           );

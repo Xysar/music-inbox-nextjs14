@@ -3,34 +3,35 @@ import { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
-  const { trackReviewInput } = await request.json();
+  const { newReview: trackReviewInput } = await request.json();
+  console.log(trackReviewInput);
   await prisma.album.upsert({
     where: { id: trackReviewInput.albumId },
     update: {},
     create: {
       id: trackReviewInput.albumId,
-      artists: trackReviewInput.albumArtist,
+      artists: [trackReviewInput.albumArtist],
       name: trackReviewInput.albumName,
       imageId: trackReviewInput.albumImageId,
     },
   });
 
   await prisma.track.upsert({
-    where: { id: trackReviewInput.trackId },
+    where: { id: trackReviewInput.track.id },
     update: {},
     create: {
-      id: trackReviewInput.trackId,
+      id: trackReviewInput.track.id,
       albumId: trackReviewInput.albumId,
-      artists: trackReviewInput.trackArtists,
-      name: trackReviewInput.trackName,
+      name: trackReviewInput.track.name,
+      trackNumber: trackReviewInput.track.number,
     },
   });
 
   const createdReview = await prisma.trackReview.create({
     data: {
-      timeStamp: trackReviewInput.rating,
+      timeStamp: trackReviewInput.timeStamp,
       text: trackReviewInput.text,
-      trackId: trackReviewInput.trackId,
+      trackId: trackReviewInput.track.id,
       userId: trackReviewInput.userId,
     },
   });

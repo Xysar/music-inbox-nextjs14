@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
+
 import Introduction from "./components/Introduction";
 import MainSearch from "./components/MainSearch";
 import TopAlbums from "./components/TopAlbums";
-import { cookies } from "next/headers";
+
 import { getAlbum, searchAlbums } from "@/lib/spotify";
 import prisma from "@/lib/prisma";
 var base64 = require("base-64");

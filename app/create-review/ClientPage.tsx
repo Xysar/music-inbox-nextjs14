@@ -47,41 +47,27 @@ const ClientPage = ({
   const reviewAlbumInput = useRef<HTMLTextAreaElement>(null);
   const reviewTrackInput = useRef<HTMLTextAreaElement>(null);
 
-  const createAlbumReview = async () => {
-    const newReview = {
-      text: reviewAlbumInput.current?.value!,
-      rating: rating,
-      albumId: currentAlbumId,
-      albumName: currentAlbum!.name,
-      albumArtist: currentAlbum!.artists[0].name,
-      albumImageId: currentAlbum!.images[0].url,
-      userId: session?.user?.id,
-    };
-    const response = await fetch(`/api/create-review`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        newReview,
-      }),
-    });
-  };
+  const createAlbumReview = async () => {};
 
   const createTrackReview = async () => {
     console.log(trackObject);
     console.log(timeSelect);
-    return;
-    const newReview: TrackReview = {
+
+    const newReview = {
       text: reviewTrackInput.current?.value!,
-      timeStamp: 0,
+      timeStamp: timeSelect,
       albumId: currentAlbumId,
       albumName: currentAlbum!.name,
       albumArtist: currentAlbum!.artists[0].name,
       albumImageId: currentAlbum!.images[0].url,
+      track: {
+        id: trackObject!.id,
+        number: currentTrack,
+        name: trackObject!.name,
+      },
       userId: session?.user?.id,
     };
-    const response = await fetch(`/api/track/create-review`, {
+    const response = await fetch(`/api/tracks/create-review`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,6 +76,8 @@ const ClientPage = ({
         newReview,
       }),
     });
+    const reviewResult = await response.json();
+    console.log(reviewResult);
   };
 
   const handleSubmit = async (

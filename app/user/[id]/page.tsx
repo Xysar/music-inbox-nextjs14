@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/options";
 
@@ -10,7 +10,6 @@ import { Album } from "@/types";
 
 const getUserInfo = async (userId: string) => {
   const userInfo = await getUser(userId);
-
   return userInfo;
 };
 
@@ -37,12 +36,12 @@ const UserPage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
         <div className="pb-4 ">
-          {!userInfo.reviews && (
+          {!userInfo && (
             <p className="text-center text-xl text-white ">
               No Reviews Made Yet
             </p>
           )}
-          {userInfo.reviews && (
+          {userInfo?.trackReviews && (
             <UserReviews
               userInfo={userInfo}
               userOwnsAccount={userOwnsAccount}

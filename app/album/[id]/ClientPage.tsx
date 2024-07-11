@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { convertMillisToSeconds } from "@/lib/utils";
-import { Track } from "@prisma/client";
+import { Track } from "@/types";
 import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
 import SoundWave from "@/app/components/SoundWave";
