@@ -1,15 +1,13 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import SearchBar from "@/app/components/SearchBar";
 import Image from "next/image";
 import StarRating from "@/app/components/StarRating";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Album, Track } from "@/types";
 import { convertMillisToSeconds } from "@/lib/utils";
-import { TrackReview } from "@prisma/client";
 import SoundWave from "../components/SoundWave";
+import { SpotifyAlbum, SpotifyTrack } from "@/types";
 
 const ClientPage = ({
   trackId,
@@ -19,19 +17,21 @@ const ClientPage = ({
 }: {
   trackId: number;
   albumId: string;
-  albumInfo: Album;
+  albumInfo: SpotifyAlbum;
   soundArray: number[];
 }) => {
-  const [currentAlbum, setCurrentAlbum] = useState<Album | null>(albumInfo);
+  const [currentAlbum, setCurrentAlbum] = useState<SpotifyAlbum | null>(
+    albumInfo
+  );
   const [currentAlbumId, setCurrentAlbumId] = useState<string>(albumId);
+
   const [reviewMode, setReviewMode] = useState<string>("track");
   const [currentTrack, setCurrentTrack] = useState<number>(trackId);
-  const [timeSelect, setTimeSelect] = useState<number>(0);
+  const [timeSelect, setTimeSelect] = useState<number>(-1);
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
-
   const trackObject = currentAlbum?.tracks.items[currentTrack];
 
   const { data: session } = useSession();
@@ -64,8 +64,10 @@ const ClientPage = ({
         id: trackObject!.id,
         number: currentTrack,
         name: trackObject!.name,
-        artists: trackObject?.artists.map((artist) => artist.name),
-        duration: trackObject?.duration_ms,
+        artists: trackObject?.artists.map(
+          (artist: { name: any }) => artist.name
+        ),
+        duration_ms: trackObject?.duration_ms,
       },
       userId: session?.user?.id,
     };
@@ -116,28 +118,30 @@ const ClientPage = ({
 
   const returnTracklist = () => {
     if (currentAlbum?.tracks) {
-      return currentAlbum.tracks.items.map((curTrack: Track, index: number) => {
-        return (
-          <button
-            onClick={() => {
-              setCurrentTrack(index);
-              reviewTrackInput.current!.value = "";
-            }}
-            key={index}
-            className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
-              currentTrack === index
-                ? " border-2 border-white"
-                : " border-2 border-black"
-            } `}
-          >
-            <div className="flex gap-2">
-              <p>{index + 1}.</p>
-              <p>{curTrack.name}</p>
-            </div>
-            <p className="">{convertMillisToSeconds(curTrack.duration_ms)}</p>
-          </button>
-        );
-      });
+      return currentAlbum.tracks.items.map(
+        (curTrack: SpotifyTrack, index: number) => {
+          return (
+            <button
+              onClick={() => {
+                setCurrentTrack(index);
+                reviewTrackInput.current!.value = "";
+              }}
+              key={index}
+              className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
+                currentTrack === index
+                  ? " border-2 border-white"
+                  : " border-2 border-black"
+              } `}
+            >
+              <div className="flex gap-2">
+                <p>{index + 1}.</p>
+                <p>{curTrack.name}</p>
+              </div>
+              <p className="">{convertMillisToSeconds(curTrack.duration_ms)}</p>
+            </button>
+          );
+        }
+      );
     } else return <div>No Tracklist Info Found</div>;
   };
 

@@ -6,15 +6,17 @@ export const getAlbumData = async (mbid: string) => {
       id: mbid!,
     },
     include: {
-      albumReviews: {
-        select: {
-          rating: true,
-          text: true,
-          user: {
-            select: {
-              id: true,
-              image: true,
-              name: true,
+      tracks: {
+        include: {
+          trackReviews: {
+            include: {
+              user: {
+                select: {
+                  name: true,
+                  id: true,
+                  image: true,
+                },
+              },
             },
           },
         },

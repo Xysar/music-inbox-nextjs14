@@ -71,14 +71,14 @@ model Track {
     artists      String[]
     name         String
     albumId      String
-    duration     Int           @default(0)
+    duration_ms  Int           @default(0)
     trackReviews TrackReview[]
     album        Album         @relation(fields: [albumId], references: [id])
 }
 
 model TrackReview {
     id        Int    @id @default(autoincrement())
-    timeStamp Int
+    timeStamp Float
     text      String
     trackId   String
     userId    String

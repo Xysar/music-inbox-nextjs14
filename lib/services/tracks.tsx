@@ -6,19 +6,7 @@ export const getTrackData = async (id: string) => {
       id: id!,
     },
     include: {
-      trackReviews: {
-        select: {
-          timeStamp: true,
-          text: true,
-          user: {
-            select: {
-              id: true,
-              image: true,
-              name: true,
-            },
-          },
-        },
-      },
+      trackReviews: true,
     },
   });
   return trackData;

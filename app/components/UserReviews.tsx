@@ -1,49 +1,53 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
 import StarRating from "./StarRating";
-import StaticStarRating from "./StaticStarRating";
-import { AlbumReview } from "@prisma/client";
+
+import { AlbumReview, TrackReview } from "@prisma/client";
+import SoundWave from "./SoundWave";
+import { TrackReviewWithTrackAlbums } from "@/types";
 
 const UserReviews = ({
   userInfo,
   userOwnsAccount,
+  soundArray,
 }: {
   userInfo: any;
+  soundArray: any[];
   userOwnsAccount: boolean;
 }) => {
   useEffect(() => {
     console.log(userInfo);
   }, []);
+
   const [trackReviews, setTrackReviews] = useState(userInfo.trackReviews);
   const [rating, setRating] = useState(0);
+  const [editTimeSelect, setEditTimeSelect] = useState(0);
   const [reviewMode, setReviewMode] = useState("track");
   const [textValue, setTextValue] = useState("");
   const [reviewId, setReviewId] = useState(-1);
   const [reviewToEdit, setReviewToEdit] = useState(-1);
-  const handleDelete = async (reviewToDelete: AlbumReview, index: number) => {
+  const handleDelete = async (reviewToDelete: TrackReview, index: number) => {
     setTrackReviews(
       trackReviews.filter(
         (singleReview: AlbumReview) => singleReview.id !== reviewToDelete.id
       )
     );
-    await deleteReview(reviewToDelete);
+    await deleteTrackReview(reviewToDelete);
   };
 
-  const deleteReview = async (review: AlbumReview) => {
+  const deleteTrackReview = async (review: TrackReview) => {
     const reviewId = review.id;
-    const response = await fetch(`/api/delete-review`, {
+    const response = await fetch(`/api/tracks/delete-review`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -54,11 +58,11 @@ const UserReviews = ({
     });
   };
 
-  async function handleEditSubmit(
+  async function handleTrackReviewEditSubmit(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     reviewIndex: number
   ) {
-    const response = await fetch(`/api/update-review`, {
+    const response = await fetch(`/api/tracks/update-review`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +70,7 @@ const UserReviews = ({
       body: JSON.stringify({
         reviewId,
         textValue,
-        rating,
+        editTimeSelect,
       }),
     });
 
@@ -85,10 +89,9 @@ const UserReviews = ({
     setReviewId(-1);
   }
 
-  function handleEditOpen(review: AlbumReview, index: number): void {
+  function handleTrackReviewEditOpen(review: TrackReview, index: number): void {
     setReviewToEdit(index);
     setTextValue(review.text);
-    setRating(review.rating);
     setReviewId(review.id);
   }
 
@@ -119,13 +122,13 @@ const UserReviews = ({
       {!trackReviews && (
         <p className="text-center text-xl text-white ">No Reviews Made Yet</p>
       )}
-      {trackReviews.map((review: any, index: number) => (
+      {trackReviews.map((review: TrackReviewWithTrackAlbums, index: number) => (
         <div
           key={review.id}
           className="mb-4 border-white border rounded-lg flex "
         >
           <Image
-            src={review.track.album.imageId}
+            src={review.track.album.imageId!}
             width={200}
             className="h-[300px] w-[300px] p-2 rounded-xl "
             height={200}
@@ -134,7 +137,7 @@ const UserReviews = ({
           <div className="w-full p-5">
             <div className="flex justify-between mb-4 ">
               <div className="text-white  flex-1 w-[100px]  overflow-hidden">
-                <h1 className="text-3xl font-bold  ">
+                <h1 className="text-3xl font-bold">
                   {review.track.album.name.length > 250
                     ? `${review.track.album.name.substring(0, 250)}...`
                     : review.track.album.name}
@@ -146,7 +149,7 @@ const UserReviews = ({
                   <div className=" flex gap-2">
                     {reviewToEdit !== index ? (
                       <button
-                        onClick={() => handleEditOpen(review, index)}
+                        onClick={() => handleTrackReviewEditOpen(review, index)}
                         className="flex h-10 w-10 items-center justify-center hover:bg-slate-800 rounded-full "
                       >
                         <Image
@@ -215,7 +218,13 @@ const UserReviews = ({
 
             {reviewToEdit === index && (
               <div className="">
-                <StarRating rating={rating} setRating={setRating} />
+                <SoundWave
+                  trackInfo={review.track}
+                  interactive={true}
+                  soundArray={soundArray}
+                  timeSelect={review.timeStamp}
+                  setTimeSelect={undefined}
+                />
                 <div className="">
                   <textarea
                     style={{ whiteSpace: "pre-line" }}
@@ -226,7 +235,7 @@ const UserReviews = ({
                 </div>
                 <button
                   type="submit"
-                  onClick={(e) => handleEditSubmit(e, index)}
+                  onClick={(e) => handleTrackReviewEditSubmit(e, index)}
                   className="bg-orange-600 text-white rounded-md p-2  hover:bg-dark-navy hover:border-white duration-150 ease-in-out"
                 >
                   Save Changes
@@ -236,7 +245,13 @@ const UserReviews = ({
             {reviewToEdit !== index && (
               <div className="">
                 <div className="mb-4">
-                  <StaticStarRating rating={review.rating} />
+                  <SoundWave
+                    trackInfo={review.track}
+                    interactive={false}
+                    soundArray={soundArray}
+                    timeSelect={review.timeStamp}
+                    setTimeSelect={undefined}
+                  />
                 </div>
                 <div className="">
                   <p

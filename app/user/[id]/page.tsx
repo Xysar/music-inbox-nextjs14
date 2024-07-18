@@ -13,6 +13,9 @@ const getUserInfo = async (userId: string) => {
 };
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
+  const soundArray = new Array(25)
+    .fill(1)
+    .map(() => Math.floor(Math.random() * (110 - 20) + 20));
   const session = await getServerSession(authOptions);
   const userOwnsAccount = session?.user.id == params.id;
   const userInfo = await getUserInfo(params.id);
@@ -42,6 +45,7 @@ const UserPage = async ({ params }: { params: { id: string } }) => {
           )}
           {userInfo?.trackReviews && (
             <UserReviews
+              soundArray={soundArray}
               userInfo={userInfo}
               userOwnsAccount={userOwnsAccount}
             />

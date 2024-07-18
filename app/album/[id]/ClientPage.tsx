@@ -2,25 +2,28 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { convertMillisToSeconds } from "@/lib/utils";
-import { Track } from "@/types";
+import { Track, TrackReview } from "@prisma/client";
 import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
 import SoundWave from "@/app/components/SoundWave";
-import SpotifyPlayer from "@/app/components/SpotifyPlayer";
-import SpotifyScript from "@/app/components/scripts/SpotifyScript";
-import { useSession } from "next-auth/react";
+import { TrackReviewWithUser, TrackWithReviewsUsers } from "@/types";
+
 const ClientPage = ({
   albumInfo,
   albumData,
   soundArray,
+  trackMap,
 }: {
   albumInfo: any;
   albumData: any;
   soundArray: any;
+  trackMap: Map<number, TrackWithReviewsUsers>;
 }) => {
   const [trackMode, setTrackMode] = useState(0);
+  let displayedReviews: TrackReviewWithUser[] | undefined =
+    trackMap.get(trackMode)?.trackReviews;
   const [timeSelect, setTimeSelect] = useState<number>(0);
-  const { data: session } = useSession();
+
   function handleTrackClick(trackNumber: number): void {
     setTrackMode(trackNumber);
   }
@@ -30,7 +33,6 @@ const ClientPage = ({
     console.log(albumData);
   }, []);
 
-  let albumReviews = albumData?.reviews;
   const returnTracklist = () => {
     if (albumInfo?.tracks) {
       return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
@@ -101,10 +103,10 @@ const ClientPage = ({
       </div>
 
       <div className="">
-        {!albumReviews && (
+        {(!displayedReviews || displayedReviews.length == 0) && (
           <p className="text-center text-3xl text-white">No Reviews Made Yet</p>
         )}
-        {albumReviews?.map((review: any, index: number) => (
+        {displayedReviews?.map((review: TrackReviewWithUser, index: number) => (
           <div
             key={index}
             className="mb-4 border-white border rounded-lg flex flex-col sm:flex-row"
@@ -126,7 +128,13 @@ const ClientPage = ({
             <div className="w-full  p-5">
               <div className="">
                 <div className="mb-4">
-                  <StaticStarRating rating={review.rating} />
+                  <SoundWave
+                    trackInfo={albumInfo?.tracks.items[trackMode]}
+                    timeSelect={review.timeStamp}
+                    setTimeSelect={undefined}
+                    interactive={false}
+                    soundArray={soundArray}
+                  />
                 </div>
                 <div className="">
                   <p
@@ -141,7 +149,6 @@ const ClientPage = ({
           </div>
         ))}
       </div>
-      <SpotifyPlayer accessToken={session?.user.token} />
     </div>
   );
 };
