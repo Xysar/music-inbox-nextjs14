@@ -3,7 +3,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import queryString from "query-string";
-import SpotifyLogin from "../components/SpotifyLogin";
+
 var base64 = require("base-64");
 const page = async ({ searchParams }: { searchParams: any }) => {
   const { error, code, state } = searchParams;
@@ -49,10 +49,6 @@ const page = async ({ searchParams }: { searchParams: any }) => {
         {" "}
         {!error &&
           "Successfully linked your Spotify account, redirecting to home page now!"}
-        <SpotifyLogin
-          accessToken={res.access_token}
-          setRefreshToken={setRefreshToken}
-        />
       </div>
     </div>
   );
