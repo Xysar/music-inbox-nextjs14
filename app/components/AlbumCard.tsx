@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Album } from "@/types";
+import { SpotifyAlbum } from "@/types";
 
 const AlbumCard = ({
   currentAlbum,
   currentAlbumId,
   showLink,
 }: {
-  currentAlbum: Album;
+  currentAlbum: SpotifyAlbum;
   currentAlbumId: string;
   showLink: boolean;
 }) => {

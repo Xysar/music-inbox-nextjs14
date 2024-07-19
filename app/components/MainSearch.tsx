@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Album } from "@/types";
+import { SpotifyAlbum } from "@/types";
 import AlbumCard from "./AlbumCard";
 import SearchBar from "./SearchBar";
 
@@ -9,7 +9,7 @@ const MainSearch = ({
   initialAlbum,
   initialAlbumId,
 }: {
-  initialAlbum: Album;
+  initialAlbum: SpotifyAlbum;
   initialAlbumId: string;
 }) => {
   const [currentAlbum, setCurrentAlbum] = useState<any>(initialAlbum);

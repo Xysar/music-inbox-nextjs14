@@ -1,6 +1,6 @@
 "use client";
 export const dynamic = "force-dynamic";
-import { Album } from "@/types";
+import { SpotifyAlbum } from "@/types";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
@@ -65,7 +65,7 @@ const SearchBar = ({
     setdisplayResults(true);
   };
 
-  const handleAlbumClick = (result: Album) => {
+  const handleAlbumClick = (result: SpotifyAlbum) => {
     loadAlbum(result.id);
     setdisplayResults(false);
   };
@@ -87,7 +87,7 @@ const SearchBar = ({
           </div>
           {displayResults && (
             <div className="w-full absolute top-full z-10 bg-slate-500 ">
-              {currentResults?.map((result: Album, index: number) => (
+              {currentResults?.map((result: SpotifyAlbum, index: number) => (
                 <div
                   key={index}
                   className="py-1 flex gap-4 px-1 cursor-pointer hover:bg-slate-200"
