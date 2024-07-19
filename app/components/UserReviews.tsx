@@ -25,10 +25,6 @@ const UserReviews = ({
   soundArray: any[];
   userOwnsAccount: boolean;
 }) => {
-  useEffect(() => {
-    console.log(userInfo);
-  }, []);
-
   const [trackReviews, setTrackReviews] = useState(userInfo.trackReviews);
   const [rating, setRating] = useState(0);
   const [editTimeSelect, setEditTimeSelect] = useState(0);
@@ -70,7 +66,7 @@ const UserReviews = ({
       body: JSON.stringify({
         reviewId,
         textValue,
-        editTimeSelect,
+        timeStamp: editTimeSelect,
       }),
     });
 
@@ -78,19 +74,19 @@ const UserReviews = ({
 
     const newUserReviews = trackReviews.map((review: any, index: number) => {
       if (index === reviewIndex) {
-        return { ...review, rating: rating, text: textValue };
+        return { ...review, timeStamp: editTimeSelect, text: textValue };
       } else return review;
     });
 
     setTrackReviews(newUserReviews);
     setReviewToEdit(-1);
     setTextValue("");
-    setRating(-1);
     setReviewId(-1);
   }
 
   function handleTrackReviewEditOpen(review: TrackReview, index: number): void {
     setReviewToEdit(index);
+    setEditTimeSelect(review.timeStamp);
     setTextValue(review.text);
     setReviewId(review.id);
   }
@@ -222,8 +218,8 @@ const UserReviews = ({
                   trackInfo={review.track}
                   interactive={true}
                   soundArray={soundArray}
-                  timeSelect={review.timeStamp}
-                  setTimeSelect={undefined}
+                  timeSelect={editTimeSelect}
+                  setTimeSelect={setEditTimeSelect}
                 />
                 <div className="">
                   <textarea

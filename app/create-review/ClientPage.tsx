@@ -27,7 +27,7 @@ const ClientPage = ({
 
   const [reviewMode, setReviewMode] = useState<string>("track");
   const [currentTrack, setCurrentTrack] = useState<number>(trackId);
-  const [timeSelect, setTimeSelect] = useState<number>(-1);
+  const [timeSelect, setTimeSelect] = useState<number>(0);
   const [rating, setRating] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

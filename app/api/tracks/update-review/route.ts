@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 
 export async function PUT(request: NextRequest) {
   const review = await request.json();
+  console.log(review);
   const updatedReview = await prisma.trackReview.update({
     where: { id: review.reviewId },
     data: {

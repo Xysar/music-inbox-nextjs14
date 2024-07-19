@@ -1,7 +1,6 @@
 .highlight {
   animation: fade-color-keyframes 0.5s;
   animation-fill-mode: forwads;
-  background-color: white;
 }
 
 @keyframes fade-color-keyframes {

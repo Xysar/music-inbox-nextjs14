@@ -7,6 +7,7 @@ import Image from "next/image";
 import StaticStarRating from "@/app/components/StaticStarRating";
 import SoundWave from "@/app/components/SoundWave";
 import { TrackReviewWithUser, TrackWithReviewsUsers } from "@/types";
+import SoundWaveReviews from "@/app/components/SoundWaveReviews";
 
 const ClientPage = ({
   albumInfo,
@@ -20,9 +21,9 @@ const ClientPage = ({
   trackMap: Map<number, TrackWithReviewsUsers>;
 }) => {
   const [trackMode, setTrackMode] = useState(0);
-  let displayedReviews: TrackReviewWithUser[] | undefined =
-    trackMap.get(trackMode)?.trackReviews;
-  const [timeSelect, setTimeSelect] = useState<number>(0);
+  let displayedReviews: TrackReviewWithUser[] =
+    trackMap.get(trackMode)?.trackReviews || [];
+  const [chosenReview, setChosenReview] = useState<number>(0);
 
   function handleTrackClick(trackNumber: number): void {
     setTrackMode(trackNumber);
@@ -66,7 +67,8 @@ const ClientPage = ({
               <h2 className="text-2xl">{albumInfo?.artists[0].name}</h2>
             </div>
             <Image
-              src={`${albumInfo?.images[0].url}`}
+              // src={`${albumInfo?.images[0].url}`}
+              src={"/"}
               alt="album picture"
               width={300}
               height={300}
@@ -93,12 +95,12 @@ const ClientPage = ({
             )}
           </div>
         </div>
-        <SoundWave
-          trackInfo={albumInfo?.tracks.items[trackMode]}
-          timeSelect={timeSelect}
-          setTimeSelect={setTimeSelect}
-          interactive={false}
+        <SoundWaveReviews
+          trackInfo={albumInfo.tracks.items[trackMode]}
           soundArray={soundArray}
+          trackReviews={displayedReviews!}
+          chosenReview={chosenReview}
+          setChosenReview={setChosenReview}
         />
       </div>
 

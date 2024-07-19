@@ -57,7 +57,7 @@ const SoundWave = ({
     if (interactive) {
       setFirstClicked(true);
       setClicked(true);
-      console.log(clicked);
+
       setTimeSelect((mousePosition.x! - rect?.left) / rect.width);
     }
   };
@@ -101,7 +101,7 @@ const SoundWave = ({
                   ? mousePosition.x! - rect?.left
                   : timeSelect! * rect?.width + "px",
             }}
-            className={`${firstClicked && "opacity-50"} absolute`}
+            className={`${firstClicked && "opacity-65"} absolute`}
           >
             <div
               className={` bg-slate-500 w-8 h-8 rounded-full right-[16px] relative`}
@@ -137,20 +137,14 @@ const SoundWave = ({
             style={{
               left: timeSelect! * rect?.width + "px",
             }}
-            className="relative"
+            className={`relative`}
           >
             <div className="bg-slate-500 w-8 h-8 rounded-full right-[16px] relative">
               <div
-                // style={{
-                //   backgroundColor: "white",
-                // }}
                 className={`${
                   clicked ? styles.highlight : ""
                 } w-6 h-6 bg-white rounded-full left-0 right-0 m-auto top-1 z-10 relative`}
-                onAnimationEnd={() => {
-                  setClicked(false);
-                  console.log("test");
-                }}
+                onAnimationEnd={() => setClicked(false)}
               ></div>
               <div
                 style={{
@@ -163,11 +157,8 @@ const SoundWave = ({
               ></div>
               <p className="text-white absolute left-[40px] top-1">
                 {convertMillisToSeconds(
-                  interactive && inBound
-                    ? (mousePosition.x! - rect?.left) /
-                        (rect.width / trackInfo.duration_ms)
-                    : (timeSelect * rect?.width) /
-                        (rect?.width / trackInfo.duration_ms)
+                  (timeSelect * rect?.width) /
+                    (rect?.width / trackInfo.duration_ms)
                 )}
               </p>
             </div>
