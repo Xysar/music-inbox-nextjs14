@@ -21,18 +21,20 @@ const ClientPage = ({
   trackMap: Map<number, TrackWithReviewsUsers>;
 }) => {
   const [trackMode, setTrackMode] = useState(0);
-  let displayedReviews: TrackReviewWithUser[] =
-    trackMap.get(trackMode)?.trackReviews || [];
+  const [displayedReviews, setDisplayedReviews] = useState<
+    TrackReviewWithUser[]
+  >(trackMap.get(0)?.trackReviews || []);
   const [chosenReview, setChosenReview] = useState<number>(0);
 
   function handleTrackClick(trackNumber: number): void {
     setTrackMode(trackNumber);
+    setDisplayedReviews(trackMap.get(trackNumber)?.trackReviews || []);
   }
 
-  useEffect(() => {
-    console.log(albumInfo);
-    console.log(albumData);
-  }, []);
+  // useEffect(() => {
+  //   console.log(albumInfo);
+  //   console.log(albumData);
+  // }, []);
 
   const returnTracklist = () => {
     if (albumInfo?.tracks) {
@@ -67,8 +69,7 @@ const ClientPage = ({
               <h2 className="text-2xl">{albumInfo?.artists[0].name}</h2>
             </div>
             <Image
-              // src={`${albumInfo?.images[0].url}`}
-              src={"/"}
+              src={`${albumInfo?.images[0].url}`}
               alt="album picture"
               width={300}
               height={300}
@@ -99,6 +100,7 @@ const ClientPage = ({
           trackInfo={albumInfo.tracks.items[trackMode]}
           soundArray={soundArray}
           trackReviews={displayedReviews!}
+          setTrackReviews={setDisplayedReviews}
           chosenReview={chosenReview}
           setChosenReview={setChosenReview}
         />

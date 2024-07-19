@@ -10,12 +10,14 @@ const SoundWaveReviews = ({
   trackInfo,
   soundArray,
   trackReviews,
+  setTrackReviews,
   chosenReview,
   setChosenReview,
 }: {
   trackInfo: any;
   soundArray: number[];
   trackReviews: TrackReviewWithUser[];
+  setTrackReviews: React.Dispatch<any>;
   chosenReview: number;
   setChosenReview: React.Dispatch<any>;
 }) => {
@@ -52,10 +54,16 @@ const SoundWaveReviews = ({
     };
   }, [trackInfo]);
 
-  const handleSelectReviewClick = (index: number) => {
-    setChosenReview(index);
+  const handleSelectReviewClick = (chosenReview: TrackReview) => {
+    setChosenReview(chosenReview.id);
 
-    console.log(index);
+    setTrackReviews((prev: any[]) => {
+      const filteredReviews = prev.filter(
+        (review: { id: number }) => chosenReview.id !== review.id
+      );
+      filteredReviews.unshift({ ...chosenReview });
+      return filteredReviews;
+    });
   };
 
   return (
@@ -74,7 +82,7 @@ const SoundWaveReviews = ({
                   height: `calc(${single}px)`,
                   backgroundColor: `${
                     index <
-                    (trackReviews[chosenReview].timeStamp * rect?.width) /
+                    (trackReviews[0]?.timeStamp * rect?.width) /
                       (rect?.width / 25)
                       ? "white"
                       : "gray"
@@ -92,15 +100,15 @@ const SoundWaveReviews = ({
               style={{
                 left: singleTrackReview.timeStamp! * rect?.width + "px",
               }}
-              className={`absolute `}
+              className={`absolute`}
             >
               <div
-                onClick={() => handleSelectReviewClick(index)}
+                onClick={() => handleSelectReviewClick(singleTrackReview)}
                 className="bg-slate-500 border border-slate-500 hover:border-white hover:z-20 box-border w-8 h-8 rounded-full right-[16px] relative"
               >
                 <div
                   className={`${
-                    chosenReview == index ? "bg-white" : ""
+                    index == 0 ? "bg-white" : ""
                   } w-6 h-6  rounded-full left-0 right-0 m-auto top-1 duration-200 z-10 relative`}
                 ></div>
                 <div
