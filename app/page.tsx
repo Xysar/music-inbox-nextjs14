@@ -42,7 +42,7 @@ export default async function Home() {
     <div className=" ">
       <Introduction />
       <MainSearch initialAlbum={initialAlbum} initialAlbumId={initialAlbumId} />
-      {/* <TopAlbums trendingAlbums={trendingAlbums} /> */}
+      <TopAlbums trendingAlbums={trendingAlbums} />
     </div>
   );
 }
