@@ -9,12 +9,12 @@ const track = {
   },
   artists: [{ name: "" }],
 };
-const SpotifyPlayer = ({ accessToken }: { accessToken: string }) => {
+const SpotifyPlayer = ({ accessToken } ) => {
   const [token, setToken] = useState(accessToken);
   const [is_paused, setPaused] = useState<boolean>(false);
   const [is_active, setActive] = useState<boolean>(false);
-  const [player, setPlayer] = useState<Spotify.Player | null>(null);
-  const [current_track, setTrack] = useState<Spotify.Track | null>(null);
+  const [player, setPlayer] = useState(null);
+  const [current_track, setTrack] = useState(null);
 
   useEffect(() => {
     const script = document.createElement("script");
