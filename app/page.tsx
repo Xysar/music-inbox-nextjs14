@@ -41,8 +41,8 @@ export default async function Home() {
   return (
     <div className=" ">
       <Introduction />
-      {/* <MainSearch initialAlbum={initialAlbum} initialAlbumId={initialAlbumId} />
-      <TopAlbums trendingAlbums={trendingAlbums} /> */}
+      <MainSearch initialAlbum={initialAlbum} initialAlbumId={initialAlbumId} />
+      {/* <TopAlbums trendingAlbums={trendingAlbums} /> */}
     </div>
   );
 }
