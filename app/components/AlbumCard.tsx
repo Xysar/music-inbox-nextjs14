@@ -18,10 +18,6 @@ const AlbumCard = ({
 
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(currentAlbum);
-  }, []);
-
   const returnTracklist = () => {
     if (currentAlbum?.tracks) {
       return (

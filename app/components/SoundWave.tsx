@@ -21,7 +21,6 @@ const SoundWave = ({
   const box = useRef<HTMLDivElement | null>(null);
   const [rect, setRect] = useState<any>(null);
   const [clicked, setClicked] = useState<boolean>(false);
-  const [firstClicked, setFirstClicked] = useState<boolean>(false);
 
   const handleResize = () => {
     setRect({
@@ -55,9 +54,7 @@ const SoundWave = ({
 
   const handleTimeSelectClick = () => {
     if (interactive) {
-      setFirstClicked(true);
       setClicked(true);
-
       setTimeSelect((mousePosition.x! - rect?.left) / rect.width);
     }
   };
@@ -101,7 +98,7 @@ const SoundWave = ({
                   ? mousePosition.x! - rect?.left
                   : timeSelect! * rect?.width + "px",
             }}
-            className={`${firstClicked && "opacity-65"} absolute`}
+            className={`opacity-65 absolute`}
           >
             <div
               className={` bg-slate-500 w-8 h-8 rounded-full right-[16px] relative`}
