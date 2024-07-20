@@ -2,11 +2,8 @@ import Introduction from "./components/Introduction";
 import MainSearch from "./components/MainSearch";
 import TopAlbums from "./components/TopAlbums";
 
-import { getAlbum, searchAlbums } from "@/lib/spotify";
+import { getAlbum } from "@/lib/spotify";
 import prisma from "@/lib/prisma";
-var base64 = require("base-64");
-import queryString from "query-string";
-import SpotifySearch from "./components/SpotifySearch";
 
 const getTrendingAlbums = async () => {
   const trendingAlbums = await prisma.album.findMany({
@@ -44,8 +41,8 @@ export default async function Home() {
   return (
     <div className=" ">
       <Introduction />
-      <MainSearch initialAlbum={initialAlbum} initialAlbumId={initialAlbumId} />
-      <TopAlbums trendingAlbums={trendingAlbums} />
+      {/* <MainSearch initialAlbum={initialAlbum} initialAlbumId={initialAlbumId} />
+      <TopAlbums trendingAlbums={trendingAlbums} /> */}
     </div>
   );
 }

@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "lib/prisma.js"
-  ],
+, "app/components/SpotifyPlayer.jsx"  ],
   "exclude": ["node_modules"]
 }
