@@ -22,7 +22,7 @@ export default async function Home() {
   const initialAlbumId = "0bUTHlWbkSQysoM3VsWldT";
   const initialAlbum = await getAlbum(initialAlbumId);
   const trendingAlbums: any[] = await getTrendingAlbums();
-
+  console.log(initialAlbum);
   for (let i = 0; i < 5; i++) {
     if (!trendingAlbums[i]) {
       break;
