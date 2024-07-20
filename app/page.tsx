@@ -1,4 +1,3 @@
-
 import Introduction from "./components/Introduction";
 import MainSearch from "./components/MainSearch";
 import TopAlbums from "./components/TopAlbums";
@@ -25,7 +24,7 @@ const getTrendingAlbums = async () => {
 export default async function Home() {
   const initialAlbumId = "0bUTHlWbkSQysoM3VsWldT";
   const initialAlbum = await getAlbum(initialAlbumId);
-  const trendingAlbums = await getTrendingAlbums();
+  const trendingAlbums: any[] = await getTrendingAlbums();
 
   for (let i = 0; i < 5; i++) {
     if (!trendingAlbums[i]) {
