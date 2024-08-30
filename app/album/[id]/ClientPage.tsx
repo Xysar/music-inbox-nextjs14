@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import Link from "next/link";
 import { convertMillisToSeconds } from "@/lib/utils";
 import { Track, TrackReview } from "@prisma/client";
@@ -8,6 +8,7 @@ import StaticStarRating from "@/app/components/StaticStarRating";
 import SoundWave from "@/app/components/SoundWave";
 import { TrackReviewWithUser, TrackWithReviewsUsers } from "@/types";
 import SoundWaveReviews from "@/app/components/SoundWaveReviews";
+import AnimateReviews from "@/app/components/AnimateReviews";
 
 const ClientPage = ({
   albumInfo,
@@ -31,34 +32,50 @@ const ClientPage = ({
     setDisplayedReviews(trackMap.get(trackNumber)?.trackReviews || []);
   }
 
-  // useEffect(() => {
-  //   console.log(albumInfo);
-  //   console.log(albumData);
-  // }, []);
+  useEffect(() => {
+    console.log(albumInfo);
+    console.log(albumData);
+  }, []);
 
   const returnTracklist = () => {
     if (albumInfo?.tracks) {
-      return albumInfo.tracks.items.map((curTrack: Track, index: number) => {
-        return (
-          <button
-            onClick={() => handleTrackClick(index)}
-            key={index}
-            className={`flex w-full justify-between border-gray-600 bg-black p-1 px-3 hover:bg-slate-900 ${
-              trackMode === index
-                ? " border-2 border-white"
-                : " border-2 border-black"
-            } `}
-          >
-            <div className="flex gap-2">
-              <p>{index + 1}.</p>
-              <p>{curTrack.name}</p>
-            </div>
-            <p className="">{convertMillisToSeconds(curTrack.duration_ms)}</p>
-          </button>
-        );
-      });
+      return (
+        <div>
+          <div className="w-full flex justify-between bg-slate-900 p-2">
+            <h3>Name</h3>
+            <h3 className=""># Reviews</h3>
+          </div>
+          {albumInfo.tracks.items.map((curTrack: Track, index: number) => {
+            return (
+              <button
+                onClick={() => handleTrackClick(index)}
+                key={index}
+                className={`flex w-full  bg-dark-navy  hover:bg-slate-600 ${
+                  trackMode === index
+                    ? " border-2 border-white"
+                    : " border-2 border-dark-navy"
+                } `}
+              >
+                <div className="flex pr-2 w-full justify-between border-r-2 py-1 px-2">
+                  <div className="flex gap-2">
+                    <p className="text-center px-1">{index + 1}</p>
+                    <p>{curTrack.name}</p>
+                  </div>
+                  <p className="">
+                    {convertMillisToSeconds(curTrack.duration_ms)}
+                  </p>
+                </div>
+                <div className="bg-dark-navy py-1 px-2 w-12">
+                  {trackMap.get(index)?.trackReviews.length || 0}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      );
     } else return <div>No Tracklist Info Found</div>;
   };
+
   return (
     <div>
       <div className="z-[5] my-10 w-full rounded-lg bg-slate-800 p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
@@ -84,7 +101,7 @@ const ClientPage = ({
               Create Review
             </Link> */}
           </div>
-          <div className=" col-span-3  ">
+          <div className="col-span-3">
             {albumInfo && (
               <div className="    gap-6 text-lg sm:flex-row">
                 <div className=" flex flex-col justify-between">
@@ -110,48 +127,55 @@ const ClientPage = ({
         {(!displayedReviews || displayedReviews.length == 0) && (
           <p className="text-center text-3xl text-white">No Reviews Made Yet</p>
         )}
-        {displayedReviews?.map((review: TrackReviewWithUser, index: number) => (
-          <div
-            key={index}
-            className="mb-4 border-white border rounded-lg flex flex-col sm:flex-row"
-          >
-            <div className="float-left inline-block flex-grow-0 p-8 hover:bg-slate-500 duration-150 ease-in-out rounded-l-lg">
-              <Link href={`/user/${review?.user?.id}`}>
-                <Image
-                  src={`${review?.user?.image}`}
-                  alt=""
-                  width={200}
-                  height={200}
-                  className="m-auto h-[100px] w-[100px] rounded-full object-cover"
-                />
-                <h1 className="text-center  text-2xl text-white ">
-                  {review.user.name}
-                </h1>
-              </Link>
-            </div>
-            <div className="w-full  p-5">
-              <div className="">
-                <div className="mb-4">
-                  <SoundWave
-                    trackInfo={albumInfo?.tracks.items[trackMode]}
-                    timeSelect={review.timeStamp}
-                    setTimeSelect={undefined}
-                    interactive={false}
-                    soundArray={soundArray}
-                  />
+        {displayedReviews && (
+          <AnimateReviews trackMode={trackMode}>
+            {displayedReviews?.map(
+              (review: TrackReviewWithUser, index: number) => (
+                <div
+                  key={review.id}
+                  ref={createRef()}
+                  className="mb-4 border-white border rounded-lg flex flex-col sm:flex-row"
+                >
+                  <div className="float-left inline-block flex-grow-0 p-8 hover:bg-slate-500 duration-150 ease-in-out rounded-l-lg">
+                    <Link href={`/user/${review?.user?.id}`}>
+                      <Image
+                        src={`${review?.user?.image}`}
+                        alt=""
+                        width={200}
+                        height={200}
+                        className="m-auto h-[100px] w-[100px] rounded-full object-cover"
+                      />
+                      <h1 className="text-center  text-2xl text-white ">
+                        {review.user.name}
+                      </h1>
+                    </Link>
+                  </div>
+                  <div className="w-full  p-5">
+                    <div className="">
+                      <div className="mb-4">
+                        <SoundWave
+                          trackInfo={albumInfo?.tracks.items[trackMode]}
+                          timeSelect={review.timeStamp}
+                          setTimeSelect={undefined}
+                          interactive={false}
+                          soundArray={soundArray}
+                        />
+                      </div>
+                      <div className="">
+                        <p
+                          style={{ whiteSpace: "pre-line" }}
+                          className="m-auto text-white  "
+                        >
+                          {review.text}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="">
-                  <p
-                    style={{ whiteSpace: "pre-line" }}
-                    className="m-auto text-white  "
-                  >
-                    {review.text}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+              )
+            )}
+          </AnimateReviews>
+        )}
       </div>
     </div>
   );

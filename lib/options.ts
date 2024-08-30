@@ -14,6 +14,18 @@ const authOptions: AuthOptions = {
       authorization:
         "https://accounts.spotify.com/authorize?scope=streaming+user-read-email+user-read-private+user-modify-playback-state",
     }),
+    GithubProvider({
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string,
+      authorization:
+        "https://accounts.spotify.com/authorize?scope=streaming+user-read-email+user-read-private+user-modify-playback-state",
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENTID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
+      authorization:
+        "https://accounts.spotify.com/authorize?scope=streaming+user-read-email+user-read-private+user-modify-playback-state",
+    }),
   ],
   callbacks: {
     async session({ session, token, user }) {
