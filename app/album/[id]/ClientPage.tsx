@@ -32,11 +32,6 @@ const ClientPage = ({
     setDisplayedReviews(trackMap.get(trackNumber)?.trackReviews || []);
   }
 
-  useEffect(() => {
-    console.log(albumInfo);
-    console.log(albumData);
-  }, []);
-
   const returnTracklist = () => {
     if (albumInfo?.tracks) {
       return (
@@ -80,7 +75,7 @@ const ClientPage = ({
     <div>
       <div className="z-[5] my-10 w-full rounded-lg bg-slate-800 p-4 text-slate-100 drop-shadow-lg duration-150 ease-in-out  ">
         <div className="grid grid-cols-5 gap-4 ">
-          <div className="col-span-2">
+          <div className="md:col-span-2 col-span-5">
             <div className="flex justify-between">
               <h1 className="text-3xl">{albumInfo?.name}</h1>
               <h2 className="text-2xl">{albumInfo?.artists[0].name}</h2>
@@ -90,7 +85,7 @@ const ClientPage = ({
               alt="album picture"
               width={300}
               height={300}
-              className="aspect-square w-[300px] h-[300px] "
+              className="aspect-square w-[300px] h-[300px] m-auto md:m-0 "
             />
             {/* <Link
               href={`/create-review${
@@ -101,7 +96,7 @@ const ClientPage = ({
               Create Review
             </Link> */}
           </div>
-          <div className="col-span-3">
+          <div className="md:col-span-3 col-span-5">
             {albumInfo && (
               <div className="    gap-6 text-lg sm:flex-row">
                 <div className=" flex flex-col justify-between">

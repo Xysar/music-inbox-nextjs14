@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 const TopAlbums = ({ trendingAlbums }: { trendingAlbums: any }) => {
+  console.log(trendingAlbums);
   return (
     <div className="mx-4 flex-1 rounded-lg bg-dark-navy p-4 text-white">
       <h2 className=" pb-4  text-3xl">Trending Albums</h2>
@@ -33,7 +34,9 @@ const TopAlbums = ({ trendingAlbums }: { trendingAlbums: any }) => {
                   height={50}
                   className="mb-3 inline-block"
                 />
-                <h3 className="inline-block m-4 text-3xl">{album.avgRating}</h3>
+                <h3 className="inline-block m-4 text-3xl">
+                  {album.reviewCount}
+                </h3>
               </div>
             </Link>
           </li>

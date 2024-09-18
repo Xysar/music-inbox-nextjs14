@@ -60,8 +60,8 @@ const SoundWave = ({
   };
 
   return (
-    <div className="m-auto p-4 flex items-center justify-center">
-      <p className=" ">0:00</p>
+    <div className="m-auto flex  items-center  justify-center">
+      <p className="text-white pb-12 ">0:00</p>
       <div className="p-2 flex-1 max-w-[650px] relative">
         <div
           ref={box}
@@ -134,7 +134,7 @@ const SoundWave = ({
             style={{
               left: timeSelect! * rect?.width + "px",
             }}
-            className={`relative`}
+            className={`relative w-2`}
           >
             <div className="bg-slate-500 w-8 h-8 rounded-full right-[16px] relative">
               <div
@@ -162,7 +162,9 @@ const SoundWave = ({
           </div>
         </div>
       </div>
-      <p className="">{convertMillisToSeconds(trackInfo.duration_ms)}</p>
+      <p className="text-white pb-12">
+        {convertMillisToSeconds(trackInfo.duration_ms)}
+      </p>
     </div>
   );
 };
